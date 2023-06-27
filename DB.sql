@@ -81,6 +81,7 @@ CREATE TABLE `turno` (
   `id_paciente` int NOT NULL,
   `id_odontologo` int NOT NULL,
   `fecha_hora` datetime DEFAULT NULL,
+  `descripcion` varchar(200) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `id_paciente` (`id_paciente`),
   KEY `id_odontologo` (`id_odontologo`),
@@ -106,5 +107,30 @@ UNLOCK TABLES;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+insert into odontologo values(default, "Gustavo", "Aguirre", "MN20017");
+insert into odontologo values(default, "Alejandra", "Torres", "MN89512");
+insert into odontologo values(default, "Marta", "Guitierrez", "MN48947");
+insert into odontologo values(default, "Ricardo", "Perez", "MN94578");
+insert into odontologo values(default, "Pedro", "Costas", "MN256462");
+insert into odontologo values(default, "Sandra", "Milani", "MN20547");
+
+insert into paciente values(default, "Tamara", "Gomez", "Las Violetas 435", "1111", "2020-10-30");
+insert into paciente values(default, "Luciano", "Lopez", "San Martin 2014", "2222", "2021-01-09");
+insert into paciente values(default, "Teresa", "Calles", "Avellaneda 1078", "3333", "2022-09-01");
+insert into paciente values(default, "Damián", "Brown", "Los Cardos 4735", "4444", "2021-11-08");
+insert into paciente values(default, "Gonzalo", "Estevez", "Las Violetas 435", "5555", "2022-07-24");
+insert into paciente values(default, "Ezequiel", "Avalo", "Pintos 3535", "6666", "2023-04-25");
+insert into paciente values(default, "Jesús", "Luna", "Callenas 1457", "7777", "2021-09-13");
+insert into paciente values(default, "Luaciana", "Safoni", "Del Valle 2689", "8888", "2022-12-20");
+insert into paciente values(default, "Romina", "Crivaro", "Sarmiento 3451", "9999", "2021-03-10");
+insert into paciente values(default, "Esteban", "Cuenca", "Trabajadores 1235", "1010", "2023-02-07");
+
+insert into turno values(default, 1, 6, "2023-06-27 08:30:00", "Dolor de Muela");
+insert into turno values(default, 2, 6, "2023-06-27 08:15:00", "Extracción");
+insert into turno values(default, 3, 6, "2023-06-27 09:00:00", "Control cirugía");
+insert into turno values(default, 4, 3, "2023-06-27 08:30:00", "Prótesis");
+insert into turno values(default, 5, 3, "2023-06-27 08:45:00", "Limpieza");
+insert into turno values(default, 6, 3, "2023-06-27 09:30:00", "Colocación ortodoncia");
 
 -- Dump completed on 2023-06-26 21:18:47
