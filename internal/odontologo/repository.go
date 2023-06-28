@@ -8,6 +8,7 @@ import (
 
 type RepositoryOdontologo interface {
 	GetAll() ([]domain.Odontologo, error)
+	CreateOdontologo(o domain.Odontologo)(domain.Odontologo,error)
 }
 type repository struct {
 	storage store.StoreInterface
@@ -23,4 +24,15 @@ func (r *repository) GetAll() ([]domain.Odontologo, error) {
 		return []domain.Odontologo{}, errors.New("list not found")
 	}
 	return odontologos, nil
+}
+
+func (r *repository)CreateOdontologo(o domain.Odontologo)(domain.Odontologo, error)  {
+	//TODO Validate matricula 
+
+	err:= r.storage.PostOdontologo(o)
+	if err != nil {
+		return domain.Odontologo{}, errors.New("Error creating dentist")
+	}
+	return o, nil
+	
 }

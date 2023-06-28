@@ -77,3 +77,25 @@ func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	}
 	return listaT, nil
 }
+
+
+func (db *sqlStore) PostOdontologo(o domain.Odontologo) error  {
+	query := "INSERT INTO odontologo (nombre, apellido, matricula) VALUES(?,?,?)"
+	stmt,err:= db.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	resultado, err := stmt.Exec(o.Nombre,o.Apellido,o.Matricula)
+	if err != nil {
+		return err
+	}
+
+	_, err = resultado.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

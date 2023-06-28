@@ -6,6 +6,7 @@ import (
 
 type SeviceOdontologo interface {
 	GetAll() ([]domain.Odontologo, error)
+	CreateOdontologo(o domain.Odontologo)(domain.Odontologo, error)
 }
 
 type service struct {
@@ -22,4 +23,14 @@ func (s *service) GetAll() ([]domain.Odontologo, error) {
 		return []domain.Odontologo{}, err
 	}
 	return odontologos, nil
+}
+
+func (s *service) CreateOdontologo(o domain.Odontologo)(domain.Odontologo, error)  {
+
+	odontologo, err := s.repo.CreateOdontologo(o)
+	if err != nil {
+		return domain.Odontologo{},err
+	}
+	return odontologo,nil
+	
 }

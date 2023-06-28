@@ -40,6 +40,8 @@ func main() {
 	odontologos := r.Group("/odontologos")
 	{
 		odontologos.GET("", odontologoHandler.GetAll())
+		odontologos.POST("",odontologoHandler.Post())
+
 	}
 
 	pacientes := r.Group("/pacientes")
