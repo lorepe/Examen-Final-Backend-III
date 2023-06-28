@@ -4,8 +4,6 @@ import (
 	"Final/internal/domain"
 	"Final/pkg/store"
 	"errors"
-
-	"golang.org/x/mod/sumdb/storage"
 )
 
 type RepositoryPaciente interface {
