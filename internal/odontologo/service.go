@@ -8,6 +8,7 @@ type SeviceOdontologo interface {
 	GetAll() ([]domain.Odontologo, error)
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
+	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
 }
 
 type service struct {
@@ -38,6 +39,14 @@ func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, erro
 
 func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
 	odontologo, err := s.repo.GetOdontologoById(id)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+	return odontologo, nil
+}
+
+func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
+	odontologo, err:= s.repo.UpdateOdontologo(id,o)
 	if err != nil {
 		return domain.Odontologo{}, err
 	}

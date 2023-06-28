@@ -94,6 +94,24 @@ func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 	return odontologo, nil
 }
 
+func (db *sqlStore) UpdateOdontologo(id int, o domain.Odontologo) error{
+	query:= "UPDATE odontologo SET nombre = ?, apellido =?, matricula=? WHERE id=?"
+	stmt,err := db.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	resultado, err := stmt.Exec(o.Nombre, o.Apellido, o.Matricula,id)
+	if err != nil {
+		return err
+	}
+	_, err = resultado.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (db *sqlStore) PostOdontologo(o domain.Odontologo) error {
 	query := "INSERT INTO odontologo (nombre, apellido, matricula) VALUES(?,?,?)"
 	stmt, err := db.db.Prepare(query)

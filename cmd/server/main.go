@@ -41,6 +41,7 @@ func main() {
 		odontologos.GET("", odontologoHandler.GetAll())
 		odontologos.POST("", odontologoHandler.Post())
 		odontologos.GET(":id", odontologoHandler.GetById())
+		odontologos.PUT(":id",odontologoHandler.Put())
 
 	}
 
