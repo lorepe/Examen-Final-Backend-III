@@ -5,6 +5,7 @@ import (
 	"Final/internal/odontologo"
 	"Final/pkg/web"
 	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,24 +31,43 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	}
 }
 
-func (oh *odontologoHandler)Post() gin.HandlerFunc  {
+func (oh *odontologoHandler) Post() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
 		var odontologo domain.Odontologo
-		
+
 		err := ctx.ShouldBindJSON(&odontologo)
 		if err != nil {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
 		//TODO Validate empty
-		o, err:= oh.s.CreateOdontologo(odontologo)
+		o, err := oh.s.CreateOdontologo(odontologo)
 		if err != nil {
-			web.Failure(ctx , 400, err)
-			return 
+			web.Failure(ctx, 400, err)
+			return
 		}
-		web.Success(ctx,201,o)
+		web.Success(ctx, 201, o)
 
 	}
 
+}
+
+func (oh *odontologoHandler) GetById() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		odontologo, err := oh.s.GetOdontologoById(id)
+		//FIXME ERROR ESTRUCTRA VACIA
+		if err != nil {
+			web.Failure(ctx, 404, err)
+			return
+		}
+		web.Success(ctx, 200, odontologo)
+
+	}
 }

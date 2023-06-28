@@ -8,4 +8,6 @@ type StoreInterface interface {
 	GetAllTurnos() ([]domain.Turno, error)
 
 	PostOdontologo(domain.Odontologo) error
+
+	GetOdontologoById(id int) (domain.Odontologo, error)
 }
