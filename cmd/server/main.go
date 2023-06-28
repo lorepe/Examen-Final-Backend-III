@@ -13,7 +13,8 @@ import (
 func main() {
 	//repo/service para odontologo
 	//FIXME pasar a env
-	db, err := sql.Open("mysql", "root:root@tcp(serverPort:3306)/clinica")
+	db, err := sql.Open("mysql", "root:root@/clinica")
+	//user1:secret_password@/my_db"
 	if err != nil {
 		panic(err)
 	}
