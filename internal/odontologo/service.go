@@ -2,7 +2,7 @@ package odontologo
 
 import (
 	"Final/internal/domain"
-	"Final/internal/odontologo"
+
 )
 
 type SeviceOdontologo interface {
