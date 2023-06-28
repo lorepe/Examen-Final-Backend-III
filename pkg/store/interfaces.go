@@ -13,4 +13,6 @@ type StoreInterface interface {
 	GetOdontologoById(id int) (domain.Odontologo, error)
 
 	UpdateOdontologo(id int, o domain.Odontologo) error
+
+	DeleteOdontologo(id int) error
 }

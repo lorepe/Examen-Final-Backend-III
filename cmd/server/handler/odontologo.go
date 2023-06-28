@@ -149,3 +149,26 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 		web.Success(ctx, 200, o)
 	}
 }
+
+
+func (oh *odontologoHandler) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		_, err = oh.s.GetOdontologoById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("dentist not found"))
+			return
+		}
+		err= oh.s.DeleteOdontologo(id)
+		if err != nil {
+			web.Failure(ctx,404,err)
+			return
+		}
+		web.Success(ctx,204,"Message: Deleted")
+	}
+}

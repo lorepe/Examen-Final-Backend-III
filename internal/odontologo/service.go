@@ -9,6 +9,7 @@ type SeviceOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
+	DeleteOdontologo(id int) error
 }
 
 type service struct {
@@ -52,4 +53,12 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 		return domain.Odontologo{}, err
 	}
 	return odontologo, nil
+}
+
+func (s *service) DeleteOdontologo(id int) error {
+	err := s.repo.DeleteOdontologo(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }

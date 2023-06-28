@@ -11,6 +11,7 @@ type RepositoryOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
+	DeleteOdontologo(id int)error
 }
 type repository struct {
 	storage store.StoreInterface
@@ -55,5 +56,15 @@ func (r *repository) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odont
 		return domain.Odontologo{},errors.New("Error updating dentist")
 	}
 	return o, nil
+
+}
+func (r *repository) DeleteOdontologo(id int)error {
+		
+	err := r.storage.DeleteOdontologo(id)
+
+	if err != nil {
+		return errors.New("id not found")
+	}
+	return nil
 
 }

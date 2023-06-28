@@ -43,6 +43,7 @@ func main() {
 		odontologos.GET(":id", odontologoHandler.GetById())
 		odontologos.PUT(":id", odontologoHandler.Put())
 		odontologos.PATCH(":id", odontologoHandler.Patch())
+		odontologos.DELETE(":id",odontologoHandler.Delete())
 
 	}
 
