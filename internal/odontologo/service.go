@@ -45,8 +45,9 @@ func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
 	return odontologo, nil
 }
 
+// FIXME Reemplazar por alores predeterminados para el patch
 func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	odontologo, err:= s.repo.UpdateOdontologo(id,o)
+	odontologo, err := s.repo.UpdateOdontologo(id, o)
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
