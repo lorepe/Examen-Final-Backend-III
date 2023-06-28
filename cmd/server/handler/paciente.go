@@ -2,7 +2,6 @@ package server
 
 import (
 	"Final/internal/paciente"
-
 	"github.com/gin-gonic/gin"
 )
 
