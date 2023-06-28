@@ -3,6 +3,7 @@ package main
 import (
 	server "Final/cmd/server/handler"
 	"Final/internal/odontologo"
+	"Final/internal/paciente"
 	"Final/pkg/store"
 	"database/sql"
 	"log"
@@ -24,6 +25,11 @@ func main() {
 	repoOdontologo := odontologo.NewRepository(storage)
 	serviceOdontologo := odontologo.NewService(repoOdontologo)
 	odontologoHandler := server.NewOdontologoHandler(serviceOdontologo)
+	//repo/service para odontologo
+	repoPaciente := paciente.NewRepository(storage)
+	servicePaciente := paciente.NewService(repoPaciente)
+	pacienteHandler := server.NewPacienteHandler(servicePaciente)
+
 
 	//FIXME pasar a new
 	r := gin.Default()
@@ -34,6 +40,11 @@ func main() {
 	odontologos := r.Group("/odontologos")
 	{
 		odontologos.GET("", odontologoHandler.GetAll())
+	}
+
+	pacientes := r.Group("/pacientes")
+	{
+		pacientes.GET("",pacienteHandler.GetAll())
 	}
 
 	//TODO hacer una variable del puerto
