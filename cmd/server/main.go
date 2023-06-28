@@ -1,10 +1,11 @@
 package main
 
 import (
-	server "Final/cmd/server/odontologoHandler"
+	server "Final/cmd/server/handler"
 	"Final/internal/odontologo"
 	"Final/pkg/store"
 	"database/sql"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
@@ -16,7 +17,7 @@ func main() {
 	db, err := sql.Open("mysql", "root:root@/clinica")
 	//user1:secret_password@/my_db"
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	storage := store.NewSqlStore(db)
 
