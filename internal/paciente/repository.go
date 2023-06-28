@@ -7,20 +7,20 @@ import (
 )
 
 type RepositoryPaciente interface {
-	GetAll() ([]domain.Paciente,error)
+	GetAll() ([]domain.Paciente, error)
 }
-type repository struct{
+type repository struct {
 	storage store.StoreInterface
 }
 
 func NewRepository(storage store.StoreInterface) RepositoryPaciente {
-	return &repository{storage}	
+	return &repository{storage}
 }
 
-func (r *repository) GetAll()([]domain.Paciente,error) {
-	pacientes, err:= r.storage.GetAllPacientes()
+func (r *repository) GetAll() ([]domain.Paciente, error) {
+	pacientes, err := r.storage.GetAllPacientes()
 	if err != nil {
-		return []domain.Paciente{},errors.New("list not found")
-	}	
+		return []domain.Paciente{}, errors.New("list not found")
+	}
 	return pacientes, nil
 }
