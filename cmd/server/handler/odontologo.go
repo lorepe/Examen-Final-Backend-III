@@ -18,8 +18,10 @@ func NewOdontologoHandler(s odontologo.SeviceOdontologo) *odontologoHandler {
 
 func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		//FIXME ERROR
-		odontologos := oh.s.GetAll()
+		odontologos, err := oh.s.GetAll()
+		if err != nil {
+			c.JSON(404, gin.H{"error": "list not found"})
+		}
 		c.JSON(200, odontologos)
 		// web.Success(c, 200, odontologos)
 	}
