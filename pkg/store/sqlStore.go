@@ -135,7 +135,7 @@ func (db *sqlStore) PostOdontologo(o domain.Odontologo) error {
 
 func (db *sqlStore) DeleteOdontologo(id int) error {
 
-	query := "DELETE FROM products WHERE id = ?"
+	query := "DELETE FROM odontologo WHERE id = ?"
 	_, err := db.db.Exec(query, id)
 	if err != nil {
 		return err
