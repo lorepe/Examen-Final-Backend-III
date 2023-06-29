@@ -43,13 +43,14 @@ func main() {
 		odontologos.GET(":id", odontologoHandler.GetById())
 		odontologos.PUT(":id", odontologoHandler.Put())
 		odontologos.PATCH(":id", odontologoHandler.Patch())
-		odontologos.DELETE(":id",odontologoHandler.Delete())
+		odontologos.DELETE(":id", odontologoHandler.Delete())
 
 	}
 
 	pacientes := r.Group("/pacientes")
 	{
 		pacientes.GET("", pacienteHandler.GetAll())
+		pacientes.POST("", pacienteHandler.Post())
 	}
 
 	//TODO hacer una variable del puerto
