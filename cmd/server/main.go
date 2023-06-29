@@ -30,7 +30,6 @@ func main() {
 	servicePaciente := paciente.NewService(repoPaciente)
 	pacienteHandler := server.NewPacienteHandler(servicePaciente)
 
-
 	//FIXME pasar a new
 	r := gin.Default()
 
@@ -40,11 +39,17 @@ func main() {
 	odontologos := r.Group("/odontologos")
 	{
 		odontologos.GET("", odontologoHandler.GetAll())
+		odontologos.POST("", odontologoHandler.Post())
+		odontologos.GET(":id", odontologoHandler.GetById())
+		odontologos.PUT(":id", odontologoHandler.Put())
+		odontologos.PATCH(":id", odontologoHandler.Patch())
+		odontologos.DELETE(":id",odontologoHandler.Delete())
+
 	}
 
 	pacientes := r.Group("/pacientes")
 	{
-		pacientes.GET("",pacienteHandler.GetAll())
+		pacientes.GET("", pacienteHandler.GetAll())
 	}
 
 	//TODO hacer una variable del puerto

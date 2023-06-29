@@ -6,6 +6,10 @@ import (
 
 type SeviceOdontologo interface {
 	GetAll() ([]domain.Odontologo, error)
+	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
+	GetOdontologoById(id int) (domain.Odontologo, error)
+	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
+	DeleteOdontologo(id int) error
 }
 
 type service struct {
@@ -22,4 +26,39 @@ func (s *service) GetAll() ([]domain.Odontologo, error) {
 		return []domain.Odontologo{}, err
 	}
 	return odontologos, nil
+}
+
+func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error) {
+
+	odontologo, err := s.repo.CreateOdontologo(o)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+	return odontologo, nil
+
+}
+
+func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
+	odontologo, err := s.repo.GetOdontologoById(id)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+	return odontologo, nil
+}
+
+// FIXME Reemplazar por alores predeterminados para el patch
+func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
+	odontologo, err := s.repo.UpdateOdontologo(id, o)
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+	return odontologo, nil
+}
+
+func (s *service) DeleteOdontologo(id int) error {
+	err := s.repo.DeleteOdontologo(id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
