@@ -164,3 +164,20 @@ func (db *sqlStore) PostPaciente(p domain.Paciente) error {
 	return nil
 
 }
+
+func (db *sqlStore) GetPacienteById(id int) (domain.Paciente, error) {
+	var paciente domain.Paciente
+	rows, err := db.db.Query("SELECT * FROM paciente WHERE id = ?", id)
+	if err != nil {
+		return domain.Paciente{}, err
+	}
+	for rows.Next() {
+		err := rows.Scan(&paciente.Id,&paciente.Nombre,&paciente.Apellido,&paciente.Dni,&paciente.Domicilio,&paciente.FechaAlta)
+		if err != nil {
+			return domain.Paciente{}, err
+		}
+
+	}
+	return paciente, nil
+}
+
