@@ -135,6 +135,7 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
+		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Odontologo{
 			Apellido:  r.Apellido,
 			Nombre:    r.Nombre,
@@ -150,7 +151,6 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 	}
 }
 
-
 func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")
@@ -164,11 +164,11 @@ func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, errors.New("dentist not found"))
 			return
 		}
-		err= oh.s.DeleteOdontologo(id)
+		err = oh.s.DeleteOdontologo(id)
 		if err != nil {
-			web.Failure(ctx,404,err)
+			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx,204,"Message: Deleted")
+		web.Success(ctx, 204, "Message: Deleted")
 	}
 }
