@@ -199,3 +199,13 @@ func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
 	return nil
 }
 
+func (db *sqlStore) DeletePaciente(id int) error {
+
+	query := "DELETE FROM paciente WHERE id = ?"
+	_, err := db.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

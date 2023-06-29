@@ -11,6 +11,7 @@ type RepositoryPaciente interface {
 	CreatePaciente(p domain.Paciente) (domain.Paciente, error)
 	GetPacienteById(id int) (domain.Paciente, error)
 	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
+	DeletePaciente(int) error
 }
 type repository struct {
 	storage store.StoreInterface
@@ -54,5 +55,16 @@ func (r *repository) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente,
 		return domain.Paciente{}, errors.New("Error updating patient")
 	}
 	return p, nil
+
+}
+func (r *repository) DeletePaciente(id int) error {
+
+	err := r.storage.DeletePaciente(id)
+	//FIXME ESTABLECER UN ERROR PARA ID INEXISTENTE
+	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
+	if err != nil {
+		return err
+	}
+	return nil
 
 }

@@ -134,10 +134,10 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 		}
 		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Paciente{
-			Nombre: r.Nombre,
+			Nombre:    r.Nombre,
 			Apellido:  r.Apellido,
 			Domicilio: r.Domicilio,
-			Dni: r.Dni,
+			Dni:       r.Dni,
 			FechaAlta: r.FechaAlta,
 		}
 		//FIXME FALTA VALIDAR MATRICULA
@@ -147,5 +147,27 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 			return
 		}
 		web.Success(ctx, 200, p)
+	}
+}
+
+func (ph *pacienteHandler) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		_, err = ph.s.GetPacienteById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("patient not found"))
+			return
+		}
+		err = ph.s.DeletePaciente(id)
+		if err != nil {
+			web.Failure(ctx, 404, err)
+			return
+		}
+		web.Success(ctx, 204, "Message: Deleted")
 	}
 }

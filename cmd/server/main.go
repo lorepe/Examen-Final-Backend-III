@@ -54,6 +54,7 @@ func main() {
 		pacientes.GET(":id", pacienteHandler.GetById())
 		pacientes.PUT(":id", pacienteHandler.Put())
 		pacientes.PATCH(":id", pacienteHandler.Patch())
+		pacientes.DELETE(":id", pacienteHandler.Delete())
 
 	}
 
