@@ -104,3 +104,48 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 	}
 
 }
+
+func (ph *pacienteHandler) Patch() gin.HandlerFunc {
+	type Request struct {
+		Nombre    string `json:"nombre,omitempty"`
+		Apellido  string `json:"apellido,omitempty"`
+		Domicilio string `json:"domicilio,omitempty"`
+		Dni       string `json:"dni" binding:"required"`
+		FechaAlta string `json:"fecha_alta,omitempty"`
+	}
+	return func(ctx *gin.Context) {
+
+		var r Request
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		//FIXME Error id not exist
+		_, err = ph.s.GetPacienteById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("patient not found"))
+			return
+		}
+		if err := ctx.ShouldBindJSON(&r); err != nil {
+			web.Failure(ctx, 400, errors.New("invalid json"))
+			return
+		}
+		//FIXME NO ADMITIR LA MATRICULA
+		update := domain.Paciente{
+			Nombre: r.Nombre,
+			Apellido:  r.Apellido,
+			Domicilio: r.Domicilio,
+			Dni: r.Dni,
+			FechaAlta: r.FechaAlta,
+		}
+		//FIXME FALTA VALIDAR MATRICULA
+		p, err := ph.s.UpdatePaciente(id, update)
+		if err != nil {
+			web.Failure(ctx, 409, err)
+			return
+		}
+		web.Success(ctx, 200, p)
+	}
+}

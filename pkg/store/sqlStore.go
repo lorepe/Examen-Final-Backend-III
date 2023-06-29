@@ -198,3 +198,4 @@ func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
 	}
 	return nil
 }
+
