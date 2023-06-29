@@ -66,3 +66,41 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 
 	}
 }
+func (ph *pacienteHandler) Put() gin.HandlerFunc {
+
+	return func(ctx *gin.Context) {
+
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		//FIXME Error id not exist
+		_, err = ph.s.GetPacienteById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("patient not found"))
+			return
+		}
+		if err != nil {
+			web.Failure(ctx, 409, err)
+			return
+		}
+
+		var paciente domain.Paciente
+		err = ctx.ShouldBindJSON(&paciente)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid json"))
+			return
+		}
+		//TODO validate empty
+
+		p, err := ph.s.UpdatePaciente(id, paciente)
+		if err != nil {
+			web.Failure(ctx, 409, err)
+			return
+		}
+		web.Success(ctx, 200, p)
+	}
+
+}

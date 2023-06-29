@@ -7,7 +7,8 @@ import (
 type ServicePaciente interface {
 	GetAll() ([]domain.Paciente, error)
 	CreatePaciente(domain.Paciente) (domain.Paciente, error)
-	GetPacienteById(id int)(domain.Paciente,error)
+	GetPacienteById(id int) (domain.Paciente, error)
+	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 }
 
 type service struct {
@@ -38,6 +39,15 @@ func (s *service) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
 
 func (s *service) GetPacienteById(id int) (domain.Paciente, error) {
 	paciente, err := s.repo.GetPacienteById(id)
+	if err != nil {
+		return domain.Paciente{}, err
+	}
+	return paciente, nil
+}
+
+// FIXME Reemplazar por valores predeterminados para el patch
+func (s *service) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, error) {
+	paciente, err := s.repo.UpdatePaciente(id, p)
 	if err != nil {
 		return domain.Paciente{}, err
 	}

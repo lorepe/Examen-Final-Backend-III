@@ -52,6 +52,7 @@ func main() {
 		pacientes.GET("", pacienteHandler.GetAll())
 		pacientes.POST("", pacienteHandler.Post())
 		pacientes.GET(":id", pacienteHandler.GetById())
+		pacientes.PUT(":id", pacienteHandler.Put())
 
 	}
 

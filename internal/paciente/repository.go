@@ -9,7 +9,8 @@ import (
 type RepositoryPaciente interface {
 	GetAll() ([]domain.Paciente, error)
 	CreatePaciente(p domain.Paciente) (domain.Paciente, error)
-	GetPacienteById(id int)(domain.Paciente, error)
+	GetPacienteById(id int) (domain.Paciente, error)
+	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 }
 type repository struct {
 	storage store.StoreInterface
@@ -44,4 +45,14 @@ func (r *repository) GetPacienteById(id int) (domain.Paciente, error) {
 		return domain.Paciente{}, errors.New("patient not found")
 	}
 	return paciente, nil
+}
+
+func (r *repository) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, error) {
+	//TODO validate dni
+	err := r.storage.UpdatePaciente(id, p)
+	if err != nil {
+		return domain.Paciente{}, errors.New("Error updating patient")
+	}
+	return p, nil
+
 }

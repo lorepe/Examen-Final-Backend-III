@@ -172,7 +172,7 @@ func (db *sqlStore) GetPacienteById(id int) (domain.Paciente, error) {
 		return domain.Paciente{}, err
 	}
 	for rows.Next() {
-		err := rows.Scan(&paciente.Id,&paciente.Nombre,&paciente.Apellido,&paciente.Dni,&paciente.Domicilio,&paciente.FechaAlta)
+		err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
 		if err != nil {
 			return domain.Paciente{}, err
 		}
@@ -181,3 +181,20 @@ func (db *sqlStore) GetPacienteById(id int) (domain.Paciente, error) {
 	return paciente, nil
 }
 
+func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
+	query := "UPDATE paciente SET nombre = ?, apellido =?, dni=?, domicilio=?, fecha_alta =? WHERE id=?"
+	stmt, err := db.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	resultado, err := stmt.Exec(p.Nombre, p.Apellido, p.Dni, p.Domicilio, p.FechaAlta, id)
+	if err != nil {
+		return err
+	}
+	_, err = resultado.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+}
