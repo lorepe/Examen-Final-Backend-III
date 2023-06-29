@@ -8,6 +8,10 @@ import (
 
 type RepositoryPaciente interface {
 	GetAll() ([]domain.Paciente, error)
+	CreatePaciente(p domain.Paciente) (domain.Paciente, error)
+	GetPacienteById(id int) (domain.Paciente, error)
+	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
+	DeletePaciente(int) error
 }
 type repository struct {
 	storage store.StoreInterface
@@ -23,4 +27,44 @@ func (r *repository) GetAll() ([]domain.Paciente, error) {
 		return []domain.Paciente{}, errors.New("list not found")
 	}
 	return pacientes, nil
+}
+
+func (r *repository) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
+	//TODO Validate dni
+
+	err := r.storage.PostPaciente(p)
+	if err != nil {
+		return domain.Paciente{}, errors.New("Error creating paciente")
+	}
+	return p, nil
+
+}
+
+func (r *repository) GetPacienteById(id int) (domain.Paciente, error) {
+	paciente, err := r.storage.GetPacienteById(id)
+	if err != nil {
+		return domain.Paciente{}, errors.New("patient not found")
+	}
+	return paciente, nil
+}
+
+func (r *repository) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, error) {
+	//TODO validate dni
+	err := r.storage.UpdatePaciente(id, p)
+	if err != nil {
+		return domain.Paciente{}, errors.New("Error updating patient")
+	}
+	return p, nil
+
+}
+func (r *repository) DeletePaciente(id int) error {
+
+	err := r.storage.DeletePaciente(id)
+	//FIXME ESTABLECER UN ERROR PARA ID INEXISTENTE
+	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
+	if err != nil {
+		return err
+	}
+	return nil
+
 }
