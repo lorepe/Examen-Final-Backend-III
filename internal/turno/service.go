@@ -2,7 +2,7 @@ package turno
 
 import "Final/internal/domain"
 
-type serviceTurno interface {
+type ServiceTurno interface {
 	GetAll() ([]domain.Turno, error)
 }
 
@@ -10,7 +10,7 @@ type service struct {
 	repo RepositoryTurno
 }
 
-func NewService(repository RepositoryTurno) serviceTurno {
+func NewService(repository RepositoryTurno) ServiceTurno {
 	return &service{repository}
 
 }

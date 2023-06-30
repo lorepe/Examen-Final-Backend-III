@@ -4,6 +4,7 @@ import (
 	server "Final/cmd/server/handler"
 	"Final/internal/odontologo"
 	"Final/internal/paciente"
+	"Final/internal/turno"
 	"Final/pkg/store"
 	"database/sql"
 	"log"
@@ -13,7 +14,7 @@ import (
 )
 
 func main() {
-	//repo/service para odontologo
+
 	//FIXME pasar a env
 	db, err := sql.Open("mysql", "root:root@/clinica")
 	//user1:secret_password@/my_db"
@@ -22,13 +23,20 @@ func main() {
 	}
 	storage := store.NewSqlStore(db)
 
+	//repo/service para odontologo
 	repoOdontologo := odontologo.NewRepository(storage)
 	serviceOdontologo := odontologo.NewService(repoOdontologo)
 	odontologoHandler := server.NewOdontologoHandler(serviceOdontologo)
-	//repo/service para odontologo
+
+	//repo/service para paciente
 	repoPaciente := paciente.NewRepository(storage)
 	servicePaciente := paciente.NewService(repoPaciente)
 	pacienteHandler := server.NewPacienteHandler(servicePaciente)
+
+	//repo/service para turno
+	repoTurno := turno.NewRepository(storage)
+	serviceTurno := turno.NewService(repoTurno)
+	turnoHandler := server.NewTurnoHandler(serviceTurno)
 
 	//FIXME pasar a new
 	r := gin.Default()
@@ -56,6 +64,11 @@ func main() {
 		pacientes.PATCH(":id", pacienteHandler.Patch())
 		pacientes.DELETE(":id", pacienteHandler.Delete())
 
+	}
+
+	turnos := r.Group("/turnos")
+	{
+		turnos.GET("", turnoHandler.GetAll())
 	}
 
 	//TODO hacer una variable del puerto

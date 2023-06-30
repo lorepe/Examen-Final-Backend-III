@@ -20,15 +20,16 @@ func NewPacienteHandler(s paciente.ServicePaciente) *pacienteHandler {
 	}
 }
 func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
-	return func(c *gin.Context) {
+	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
 		if err != nil {
-			c.JSON(404, gin.H{"error": "list not found"})
+			ctx.JSON(404, gin.H{"error": "list not found"})
 			return
 		}
-		c.JSON(200, pacientes)
+		ctx.JSON(200, pacientes)
 	}
 }
+
 func (ph *pacienteHandler) Post() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var paciente domain.Paciente
