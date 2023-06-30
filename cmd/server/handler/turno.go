@@ -20,7 +20,7 @@ func (th *turnoHandler) GetAll() gin.HandlerFunc {
 		turnos, err := th.s.GetAll()
 		//FIXME pasar a reponse
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": "list not found"})
+			ctx.JSON(404, gin.H{"error": err})
 			return
 		}
 		ctx.JSON(200, turnos)
