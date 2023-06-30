@@ -24,6 +24,7 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 		pacientes, err := ph.s.GetAll()
 		if err != nil {
 			c.JSON(404, gin.H{"error": "list not found"})
+			return
 		}
 		c.JSON(200, pacientes)
 	}

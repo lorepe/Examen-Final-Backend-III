@@ -84,6 +84,12 @@ func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
+
+	//FIXME LIKE PACIENTE
+	// if err := rows.Err(); err != nil {
+	// 	return domain.Odontologo{}, err
+
+	// }
 	for rows.Next() {
 		err := rows.Scan(&odontologo.Id, &odontologo.Apellido, &odontologo.Nombre, &odontologo.Matricula)
 		if err != nil {
@@ -167,15 +173,15 @@ func (db *sqlStore) PostPaciente(p domain.Paciente) error {
 
 func (db *sqlStore) GetPacienteById(id int) (domain.Paciente, error) {
 	var paciente domain.Paciente
-	rows, err := db.db.Query("SELECT * FROM paciente WHERE id = ?", id)
+	rows := db.db.QueryRow("SELECT * FROM paciente WHERE id = ?", id)
+	// if err != nil {
+	// 	return domain.Paciente{}, err
+	// }
+	// for rows.Next() {
+	err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
 	if err != nil {
 		return domain.Paciente{}, err
-	}
-	for rows.Next() {
-		err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
-		if err != nil {
-			return domain.Paciente{}, err
-		}
+		// }
 
 	}
 	return paciente, nil
