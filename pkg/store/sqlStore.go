@@ -395,12 +395,12 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	inner join odontologo as o 
 	on o.id = t.id_odontologo
 	where p.dni =? ;`
-	rows := db.db.QueryRow(query,dni)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	rows, err := db.db.Query(query,dni)
+	if err != nil {
+		return nil, err
+	}
 // 
-// 	for rows.Next() {
+	for rows.Next() {
 		err := rows.Scan(&t.Id,
 			&t.Paciente.Id,
 			&t.Paciente.Nombre,
@@ -420,6 +420,6 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 			listaT = append(listaT, t)
 		}
 
-	// }
+	}
 	return listaT, nil
 }
