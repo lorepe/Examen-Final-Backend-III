@@ -194,3 +194,22 @@ func (th *turnoHandler) PostDNIMat() gin.HandlerFunc {
 	}
 
 }
+
+func (th *turnoHandler) GetAllByDni() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		dniParam := ctx.Query("dni")
+		dni, err := strconv.Atoi(dniParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid dni"))
+			return
+		}
+		turnos, err := th.s.GetAllByDni(dni)
+		//FIXME pasar a reponse
+		if err != nil {
+			ctx.JSON(404, gin.H{"error": err})
+			return
+		}
+		ctx.JSON(200, turnos)
+	}
+}
+

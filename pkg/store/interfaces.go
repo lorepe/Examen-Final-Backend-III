@@ -24,4 +24,6 @@ type StoreInterface interface {
 	DeleteTurno(id int)error
 
 	PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error)
+	GetTurnosByDni(id int) ([]domain.Turno, error)
+
 }

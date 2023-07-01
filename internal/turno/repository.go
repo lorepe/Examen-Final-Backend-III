@@ -13,6 +13,7 @@ type RepositoryTurno interface {
 	UpdateTurno(int, domain.Turno) (domain.Turno, error)
 	DeleteTurno(int) error
 	CreateTurnoDNIMat(domain.TurnoAuxiliar) error
+	GetAllByDni(int)([]domain.Turno,error)
 }
 
 type repository struct {
@@ -79,4 +80,12 @@ func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
 		return errors.New("Error creating appointment")
 	}
 	return nil
+}
+
+func (r *repository) GetAllByDni(dni int) ([]domain.Turno, error) {
+	turnos, err := r.storage.GetTurnosByDni(dni)
+	if err != nil {
+		return []domain.Turno{}, errors.New("list not found")
+	}
+	return turnos, nil
 }

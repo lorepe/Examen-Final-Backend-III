@@ -75,6 +75,8 @@ func main() {
 		turnos.PATCH(":id", turnoHandler.Patch())
 		turnos.DELETE(":id", turnoHandler.Delete())
 		turnos.POST("/dni", turnoHandler.PostDNIMat())
+		turnos.GET("/dni", turnoHandler.GetAllByDni())
+
 	}
 
 	//TODO hacer una variable del puerto

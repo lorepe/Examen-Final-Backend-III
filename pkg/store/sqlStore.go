@@ -373,4 +373,53 @@ func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error) {
 	
 
 }
+func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
+	var t domain.Turno
+	var listaT []domain.Turno
+	query := `select t.id, 
+	p.id, 
+	p.nombre, 
+	p.apellido, 
+	p.domicilio, 
+	p.dni, 
+	p.fecha_alta, 
+	o.id, 
+	o.apellido, 
+	o.nombre, 
+	o.matricula, 
+	t.fecha_hora, 
+	t.descripcion  
+	from turno as t 
+	inner join paciente as p 
+	on p.id = t.id_paciente 
+	inner join odontologo as o 
+	on o.id = t.id_odontologo
+	where p.dni =? ;`
+	rows := db.db.QueryRow(query,dni)
+	// if err != nil {
+	// 	return nil, err
+	// }
+// 
+// 	for rows.Next() {
+		err := rows.Scan(&t.Id,
+			&t.Paciente.Id,
+			&t.Paciente.Nombre,
+			&t.Paciente.Apellido,
+			&t.Paciente.Domicilio,
+			&t.Paciente.Dni,
+			&t.Paciente.FechaAlta,
+			&t.Odontologo.Id,
+			&t.Odontologo.Apellido,
+			&t.Odontologo.Nombre,
+			&t.Odontologo.Matricula,
+			&t.FechaHora,
+			&t.Descripcion)
+		if err != nil {
+			return nil, err
+		} else {
+			listaT = append(listaT, t)
+		}
 
+	// }
+	return listaT, nil
+}
