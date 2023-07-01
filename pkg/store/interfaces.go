@@ -17,6 +17,7 @@ type StoreInterface interface {
 
 	UpdateOdontologo(id int, o domain.Odontologo) error
 	UpdatePaciente(id int, p domain.Paciente) error
+	UpdateTurno(id int, t domain.Turno) error
 
 	DeleteOdontologo(id int) error
 	DeletePaciente(id int) error

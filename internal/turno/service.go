@@ -6,6 +6,7 @@ type ServiceTurno interface {
 	GetAll() ([]domain.Turno, error)
 	CreateTurno(domain.Turno) (domain.Turno, error)
 	GetTurnoById(int) (domain.Turno, error)
+	UpdateTurno(int,domain.Turno)(domain.Turno,error)
 }
 
 type service struct {
@@ -36,4 +37,13 @@ func (s *service) CreateTurno(t domain.Turno) (domain.Turno, error) {
 
 func (s *service) GetTurnoById(id int) (domain.Turno, error) {
 	return s.repo.GetTurnoById(id)
+}
+
+// FIXME Reemplazar por valores predeterminados para el patch
+func (s *service) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
+	turno, err := s.repo.UpdateTurno(id, t)
+	if err != nil {
+		return domain.Turno{}, err
+	}
+	return turno, nil
 }

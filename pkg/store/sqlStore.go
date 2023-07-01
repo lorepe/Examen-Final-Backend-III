@@ -307,3 +307,21 @@ func (db *sqlStore) GetTurnoById(id int) (domain.Turno, error) {
 			}
 	return t, nil
 }
+
+func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
+	query := "UPDATE turno SET id_paciente = ?, id_odontologo =?, fecha_hora=?, descripcion=? WHERE id=?"
+	stmt, err := db.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+	resultado, err := stmt.Exec(t.Paciente.Id, t.Odontologo.Id, t.FechaHora,t.Descripcion, id)
+	if err != nil {
+		return err
+	}
+	_, err = resultado.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+}

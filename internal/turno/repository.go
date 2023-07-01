@@ -10,6 +10,7 @@ type RepositoryTurno interface {
 	GetAll() ([]domain.Turno, error)
 	CreateTurno(domain.Turno) (domain.Turno, error)
 	GetTurnoById(int) (domain.Turno, error)
+	UpdateTurno(int,domain.Turno) (domain.Turno, error)
 }
 
 type repository struct {
@@ -46,4 +47,13 @@ func (r *repository) GetTurnoById(id int) (domain.Turno, error) {
 		return domain.Turno{}, err
 	}
 	return turno, nil
+}
+
+func (r *repository) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
+	//TODO validate dni
+	err := r.storage.UpdateTurno(id, t)
+	if err != nil {
+		return domain.Turno{}, errors.New("Error updating appointment")
+	}
+	return t, nil
 }
