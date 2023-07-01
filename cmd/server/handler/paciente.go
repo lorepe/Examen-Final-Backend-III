@@ -166,6 +166,7 @@ func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, errors.New("patient not found"))
 			return
 		}
+		
 		err = ph.s.DeletePaciente(id)
 		if err != nil {
 			web.Failure(ctx, 404, err)
