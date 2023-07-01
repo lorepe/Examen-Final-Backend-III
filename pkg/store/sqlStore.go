@@ -325,3 +325,15 @@ func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
 	}
 	return nil
 }
+
+
+func (db *sqlStore) DeleteTurno(id int) error {
+
+	query := "DELETE FROM turno WHERE id = ?"
+	_, err := db.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

@@ -11,6 +11,7 @@ type RepositoryTurno interface {
 	CreateTurno(domain.Turno) (domain.Turno, error)
 	GetTurnoById(int) (domain.Turno, error)
 	UpdateTurno(int,domain.Turno) (domain.Turno, error)
+	DeleteTurno(int)error
 }
 
 type repository struct {
@@ -56,4 +57,15 @@ func (r *repository) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
 		return domain.Turno{}, errors.New("Error updating appointment")
 	}
 	return t, nil
+}
+
+func (r *repository) DeleteTurno(id int) error {
+
+	err := r.storage.DeleteTurno(id)
+	//FIXME ESTABLECER UN ERROR PARA ID INEXISTENTE
+	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
+	if err != nil {
+		return err
+	}
+	return nil
 }

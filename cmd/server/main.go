@@ -73,7 +73,7 @@ func main() {
 		turnos.GET(":id", turnoHandler.GetById())
 		turnos.PUT(":id", turnoHandler.Put())
 		turnos.PATCH(":id", turnoHandler.Patch())
-
+		turnos.DELETE(":id", turnoHandler.Delete())
 	}
 
 	//TODO hacer una variable del puerto

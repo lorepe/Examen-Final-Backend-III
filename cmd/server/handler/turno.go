@@ -152,3 +152,25 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 		web.Success(ctx, 200, t)
 	}
 }
+
+func (th *turnoHandler) Delete() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		_, err = th.s.GetTurnoById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("appointment not found"))
+			return
+		}
+		err = th.s.DeleteTurno(id)
+		if err != nil {
+			web.Failure(ctx, 404, err)
+			return
+		}
+		web.Success(ctx, 204, "Message: Deleted")
+	}
+}
