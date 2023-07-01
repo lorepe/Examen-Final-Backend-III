@@ -21,11 +21,7 @@ func NewService(repository RepositoryOdontologo) SeviceOdontologo {
 }
 
 func (s *service) GetAll() ([]domain.Odontologo, error) {
-	odontologos, err := s.repo.GetAll()
-	if err != nil {
-		return []domain.Odontologo{}, err
-	}
-	return odontologos, nil
+	return s.repo.GetAll()
 }
 
 func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error) {
@@ -39,20 +35,12 @@ func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, erro
 }
 
 func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
-	odontologo, err := s.repo.GetOdontologoById(id)
-	if err != nil {
-		return domain.Odontologo{}, err
-	}
-	return odontologo, nil
+	return s.repo.GetOdontologoById(id)
 }
 
 // FIXME Reemplazar por alores predeterminados para el patch
 func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	odontologo, err := s.repo.UpdateOdontologo(id, o)
-	if err != nil {
-		return domain.Odontologo{}, err
-	}
-	return odontologo, nil
+	return s.repo.UpdateOdontologo(id, o)
 }
 
 func (s *service) DeleteOdontologo(id int) error {

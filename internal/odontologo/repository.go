@@ -49,11 +49,15 @@ func (r *repository) GetOdontologoById(id int) (domain.Odontologo, error) {
 }
 
 func (r *repository) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	//TODO validate matricula
-
-	err := r.storage.UpdateOdontologo(id, o)
+	validacion, err := r.storage.VerificarMatricula(o.Matricula)
 	if err != nil {
-		return domain.Odontologo{},errors.New("Error updating dentist")
+		return domain.Odontologo{}, err //a nivel sql
+	}
+	if validacion == false{
+		err := r.storage.UpdateOdontologo(id, o)
+		if err != nil {
+		return domain.Odontologo{}, errors.New("Error updating dentist")
+	}
 	}
 	return o, nil
 
