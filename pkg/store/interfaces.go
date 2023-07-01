@@ -9,13 +9,21 @@ type StoreInterface interface {
 
 	PostOdontologo(domain.Odontologo) error
 	PostPaciente(domain.Paciente) error
+	PostTurno(domain.Turno) error
 
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	GetPacienteById(id int) (domain.Paciente, error)
+	GetTurnoById(id int) (domain.Turno, error)
 
 	UpdateOdontologo(id int, o domain.Odontologo) error
 	UpdatePaciente(id int, p domain.Paciente) error
+	UpdateTurno(id int, t domain.Turno) error
 
 	DeleteOdontologo(id int) error
 	DeletePaciente(id int) error
+	DeleteTurno(id int)error
+
+	PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error)
+	GetTurnosByDni(id int) ([]domain.Turno, error)
+
 }
