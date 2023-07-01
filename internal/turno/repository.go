@@ -8,6 +8,7 @@ import (
 
 type RepositoryTurno interface {
 	GetAll() ([]domain.Turno, error)
+	CreateTurno(domain.Turno)(domain.Turno,error)
 }
 
 type repository struct {
@@ -24,4 +25,14 @@ func (r *repository) GetAll() ([]domain.Turno, error) {
 		return []domain.Turno{}, errors.New("list not found")
 	}
 	return turnos, nil
+}
+
+func(r *repository)CreateTurno(t domain.Turno)(domain.Turno, error){
+
+	err:= r.storage.PostTurno(t)
+
+	if err != nil {
+		return domain.Turno{}, errors.New("Error creating appointment")
+	}
+	return t,nil
 }

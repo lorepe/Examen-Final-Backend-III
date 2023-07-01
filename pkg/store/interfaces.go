@@ -9,6 +9,7 @@ type StoreInterface interface {
 
 	PostOdontologo(domain.Odontologo) error
 	PostPaciente(domain.Paciente) error
+	PostTurno(domain.Turno) error
 
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	GetPacienteById(id int) (domain.Paciente, error)

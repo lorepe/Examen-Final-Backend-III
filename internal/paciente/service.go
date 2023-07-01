@@ -7,7 +7,7 @@ import (
 type ServicePaciente interface {
 	GetAll() ([]domain.Paciente, error)
 	CreatePaciente(domain.Paciente) (domain.Paciente, error)
-	GetPacienteById(id int) (domain.Paciente, error)
+	GetPacienteById(int) (domain.Paciente, error)
 	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 	DeletePaciente(int) error
 }

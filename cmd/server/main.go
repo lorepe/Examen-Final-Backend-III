@@ -69,6 +69,8 @@ func main() {
 	turnos := r.Group("/turnos")
 	{
 		turnos.GET("", turnoHandler.GetAll())
+		turnos.POST("", turnoHandler.Post())
+
 	}
 
 	//TODO hacer una variable del puerto

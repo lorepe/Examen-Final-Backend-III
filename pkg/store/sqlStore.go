@@ -60,7 +60,6 @@ func (db *sqlStore) GetAllPacientes() ([]domain.Paciente, error) {
 func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	var t domain.Turno
 	var listaT []domain.Turno
-	// query := "SELECT * FROM turno;"
 	query := `select t.id, 
 	p.id, 
 	p.nombre, 
@@ -85,7 +84,6 @@ func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	}
 
 	for rows.Next() {
-		// err := rows.Scan(&t.Id, &t.Paciente.Apellido, &t.Odontologo.Apellido, &t.FechaHora, &t.Descripcion)
 		err := rows.Scan(&t.Id,
 			&t.Paciente.Id,
 			&t.Paciente.Nombre,
@@ -240,6 +238,27 @@ func (db *sqlStore) DeletePaciente(id int) error {
 
 	query := "DELETE FROM paciente WHERE id = ?"
 	_, err := db.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}
+
+func (db *sqlStore) PostTurno(t domain.Turno) error {
+	query := "INSERT INTO turno (id_paciente, id_odontologo, fecha_hora, descripcion) VALUES(?,?,?,?)"
+	stmt, err := db.db.Prepare(query)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	resultado, err := stmt.Exec(t.Paciente.Id,t.Odontologo.Id,t.FechaHora,t.Descripcion)
+	if err != nil {
+		return err
+	}
+
+	_, err = resultado.RowsAffected()
 	if err != nil {
 		return err
 	}

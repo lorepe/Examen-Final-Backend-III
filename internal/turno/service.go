@@ -4,6 +4,7 @@ import "Final/internal/domain"
 
 type ServiceTurno interface {
 	GetAll() ([]domain.Turno, error)
+	CreateTurno(domain.Turno)(domain.Turno, error)
 }
 
 type service struct {
@@ -21,4 +22,13 @@ func (s *service) GetAll() ([]domain.Turno, error) {
 		return []domain.Turno{}, err
 	}
 	return turnos, nil
+}
+
+func (s *service) CreateTurno(t domain.Turno) (domain.Turno, error) {
+
+	turno, err := s.repo.CreateTurno(t)
+	if err != nil {
+		return domain.Turno{}, err
+	}
+	return turno, nil
 }
