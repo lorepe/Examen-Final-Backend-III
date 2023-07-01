@@ -70,6 +70,7 @@ func main() {
 	{
 		turnos.GET("", turnoHandler.GetAll())
 		turnos.POST("", turnoHandler.Post())
+		turnos.GET(":id", turnoHandler.GetById())
 
 	}
 

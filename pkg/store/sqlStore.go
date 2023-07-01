@@ -253,7 +253,7 @@ func (db *sqlStore) PostTurno(t domain.Turno) error {
 	}
 	defer stmt.Close()
 
-	resultado, err := stmt.Exec(t.Paciente.Id,t.Odontologo.Id,t.FechaHora,t.Descripcion)
+	resultado, err := stmt.Exec(t.Paciente.Id, t.Odontologo.Id, t.FechaHora, t.Descripcion)
 	if err != nil {
 		return err
 	}
@@ -264,4 +264,46 @@ func (db *sqlStore) PostTurno(t domain.Turno) error {
 	}
 	return nil
 
+}
+
+func (db *sqlStore) GetTurnoById(id int) (domain.Turno, error) {
+	var t domain.Turno
+	rows := db.db.QueryRow(
+		`select t.id, 
+		p.id, 
+		p.nombre, 
+		p.apellido, 
+		p.domicilio, 
+		p.dni, 
+		p.fecha_alta, 
+		o.id, 
+		o.apellido, 
+		o.nombre, 
+		o.matricula, 
+		t.fecha_hora, 
+		t.descripcion  
+		from turno as t 
+		inner join paciente as p 
+		on p.id = t.id_paciente 
+		inner join odontologo as o 
+		on o.id = t.id_odontologo
+		where t.id = ?;`, id)
+	
+		err:= rows.Scan(&t.Id,
+				&t.Paciente.Id,
+				&t.Paciente.Nombre,
+				&t.Paciente.Apellido,
+				&t.Paciente.Domicilio,
+				&t.Paciente.Dni,
+				&t.Paciente.FechaAlta,
+				&t.Odontologo.Id,
+				&t.Odontologo.Apellido,
+				&t.Odontologo.Nombre,
+				&t.Odontologo.Matricula,
+				&t.FechaHora,
+				&t.Descripcion)
+			if err != nil {
+				return domain.Turno{}, err
+			}
+	return t, nil
 }

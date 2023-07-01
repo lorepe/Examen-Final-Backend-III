@@ -13,6 +13,7 @@ type StoreInterface interface {
 
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	GetPacienteById(id int) (domain.Paciente, error)
+	GetTurnoById(id int) (domain.Turno, error)
 
 	UpdateOdontologo(id int, o domain.Odontologo) error
 	UpdatePaciente(id int, p domain.Paciente) error

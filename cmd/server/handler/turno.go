@@ -5,6 +5,7 @@ import (
 	"Final/internal/turno"
 	"Final/pkg/web"
 	"errors"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,4 +49,23 @@ func (th *turnoHandler) Post() gin.HandlerFunc {
 
 	}
 
+}
+
+func (th *turnoHandler) GetById() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		turno, err := th.s.GetTurnoById(id)
+		//FIXME ERROR ESTRUCTRA VACIA
+		if err != nil {
+			web.Failure(ctx, 404, err)
+			return
+		}
+		web.Success(ctx, 200, turno)
+
+	}
 }
