@@ -174,3 +174,23 @@ func (th *turnoHandler) Delete() gin.HandlerFunc {
 		web.Success(ctx, 204, "Message: Deleted")
 	}
 }
+
+func (th *turnoHandler) PostDNIMat() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var turno domain.TurnoAuxiliar
+		err := ctx.ShouldBindJSON(&turno)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid json"))
+			return
+		}
+		//TODO Validate empty
+		err = th.s.CreateTurnoaAuxiliar(turno)
+		if err != nil {
+			web.Failure(ctx, 400, err)
+			return
+		}
+		web.Success(ctx, 201, turno)
+
+	}
+
+}

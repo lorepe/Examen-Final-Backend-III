@@ -22,4 +22,6 @@ type StoreInterface interface {
 	DeleteOdontologo(id int) error
 	DeletePaciente(id int) error
 	DeleteTurno(id int)error
+
+	PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error)
 }

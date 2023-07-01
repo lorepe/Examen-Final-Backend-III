@@ -6,8 +6,9 @@ type ServiceTurno interface {
 	GetAll() ([]domain.Turno, error)
 	CreateTurno(domain.Turno) (domain.Turno, error)
 	GetTurnoById(int) (domain.Turno, error)
-	UpdateTurno(int,domain.Turno)(domain.Turno,error)
-	DeleteTurno(int)error
+	UpdateTurno(int, domain.Turno) (domain.Turno, error)
+	DeleteTurno(int) error
+	CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error
 }
 
 type service struct {
@@ -51,6 +52,15 @@ func (s *service) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
 
 func (s *service) DeleteTurno(id int) error {
 	err := s.repo.DeleteTurno(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *service) CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error {
+
+	err := s.repo.CreateTurnoDNIMat(ta)
 	if err != nil {
 		return err
 	}

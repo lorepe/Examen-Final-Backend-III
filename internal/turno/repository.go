@@ -10,8 +10,9 @@ type RepositoryTurno interface {
 	GetAll() ([]domain.Turno, error)
 	CreateTurno(domain.Turno) (domain.Turno, error)
 	GetTurnoById(int) (domain.Turno, error)
-	UpdateTurno(int,domain.Turno) (domain.Turno, error)
-	DeleteTurno(int)error
+	UpdateTurno(int, domain.Turno) (domain.Turno, error)
+	DeleteTurno(int) error
+	CreateTurnoDNIMat(domain.TurnoAuxiliar) error
 }
 
 type repository struct {
@@ -44,7 +45,7 @@ func (r *repository) GetTurnoById(id int) (domain.Turno, error) {
 	turno, err := r.storage.GetTurnoById(id)
 	if err != nil {
 		// return domain.Turno{}, errors.New("appointment not found")
-	
+
 		return domain.Turno{}, err
 	}
 	return turno, nil
@@ -66,6 +67,16 @@ func (r *repository) DeleteTurno(id int) error {
 	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
+	//FIXME RETURN
+	err := r.storage.PostTurnoDNIMat(ta)
+
+	if err != nil {
+		return errors.New("Error creating appointment")
 	}
 	return nil
 }

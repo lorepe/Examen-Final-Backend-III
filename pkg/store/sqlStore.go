@@ -337,3 +337,40 @@ func (db *sqlStore) DeleteTurno(id int) error {
 	return nil
 
 }
+
+
+func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error) {
+	var paciente domain.Paciente
+	rows := db.db.QueryRow("SELECT * FROM paciente WHERE id = ?", ta.PacienteId)
+	var odontologo domain.Odontologo
+	rows2 := db.db.QueryRow("SELECT * FROM odontologo WHERE id = ?", ta.OdontologoId)
+
+	err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
+	if err != nil {
+		return err
+	}
+	err2 := rows2.Scan(&odontologo.Id, &odontologo.Apellido, &odontologo.Nombre, &odontologo.Matricula)
+	if err2 != nil {
+		return nil
+	}
+	query := "INSERT INTO turno (id_paciente, id_odontologo, fecha_hora, descripcion) VALUES(?,?,?,?)"
+	stmt, err3 := db.db.Prepare(query)
+	if err3 != nil {
+		return err3
+	}
+	defer stmt.Close()
+
+	resultado, err := stmt.Exec(paciente.Id, odontologo.Id, ta.FechaHora, ta.Descripcion)
+	if err != nil {
+		return err
+	}
+
+	_, err = resultado.RowsAffected()
+	if err != nil {
+		return err
+	}
+	return nil
+	
+
+}
+
