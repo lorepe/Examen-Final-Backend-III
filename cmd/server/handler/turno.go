@@ -108,3 +108,47 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 	}
 
 }
+
+func (th *turnoHandler) Patch() gin.HandlerFunc {
+	//FIXME ALL
+	type Request struct {
+		Paciente    domain.Paciente   `json:"paciente,omitempty"`
+		Odontologo  domain.Odontologo `json:"odontologo,omitempty"`
+		FechaHora   string            `json:"fecha_hora" binding:"required"`
+		Descripcion string            `json:"descripcion" binding:"required"`
+	}
+	return func(ctx *gin.Context) {
+
+		var r Request
+		idParam := ctx.Param("id")
+		id, err := strconv.Atoi(idParam)
+		if err != nil {
+			web.Failure(ctx, 400, errors.New("invalid id"))
+			return
+		}
+		//FIXME Error id not exist
+		_, err = th.s.GetTurnoById(id)
+		if err != nil {
+			web.Failure(ctx, 404, errors.New("appointment not found"))
+			return
+		}
+		if err := ctx.ShouldBindJSON(&r); err != nil {
+			web.Failure(ctx, 400, errors.New("invalid json"))
+			return
+		}
+		//FIXME NO ADMITIR LA MATRICULA
+		update := domain.Turno{
+			Paciente:    r.Paciente,
+			Odontologo:  r.Odontologo,
+			FechaHora:   r.FechaHora,
+			Descripcion: r.Descripcion,
+		}
+		//FIXME FALTA VALIDAR MATRICULA
+		t, err := th.s.UpdateTurno(id, update)
+		if err != nil {
+			web.Failure(ctx, 409, err)
+			return
+		}
+		web.Success(ctx, 200, t)
+	}
+}

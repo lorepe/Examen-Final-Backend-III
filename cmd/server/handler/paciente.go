@@ -152,6 +152,7 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 	}
 }
 
+
 func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")

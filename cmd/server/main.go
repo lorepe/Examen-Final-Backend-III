@@ -72,6 +72,7 @@ func main() {
 		turnos.POST("", turnoHandler.Post())
 		turnos.GET(":id", turnoHandler.GetById())
 		turnos.PUT(":id", turnoHandler.Put())
+		turnos.PATCH(":id", turnoHandler.Patch())
 
 	}
 
