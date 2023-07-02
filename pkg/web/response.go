@@ -12,13 +12,13 @@ type errorResponse struct {
 	Message string `json:"message"`
 }
 
-type response struct {
+type Response struct {
 	Data interface{} `json:"data"`
 }
 
 // Success escribe una respuesta exitosa
 func Success(ctx *gin.Context, status int, data interface{}) {
-	ctx.JSON(status, response{
+	ctx.JSON(status, Response{
 		Data: data,
 	})
 }

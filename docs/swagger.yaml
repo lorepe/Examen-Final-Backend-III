@@ -1,0 +1,156 @@
+definitions:
+  domain.Odontologo:
+    properties:
+      apellido:
+        type: string
+      id:
+        type: integer
+      matricula:
+        type: string
+      nombre:
+        type: string
+    required:
+    - apellido
+    - matricula
+    - nombre
+    type: object
+  web.Response:
+    properties:
+      data: {}
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: API Support
+    url: https://developers.ctd.com.ar/support
+  description: This API Handle a Dental Clinic in Go using Gin framework
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://developers.ctd.com.ar/es_ar/terminos-y-condiciones
+  title: Certified Tech Developer- Especialización Backend Golang
+  version: "1.0"
+paths:
+  /odontologos:
+    get:
+      description: Get dentist list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Odontologo'
+            type: array
+      summary: List dentists
+      tags:
+      - Odontologo
+    post:
+      consumes:
+      - application/json
+      description: Post new dentist
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+      summary: Create Dentist
+      tags:
+      - Odontologo
+  /odontologos/{id}:
+    delete:
+      description: Remove Dentist data by id.
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.Response'
+      summary: Delete Dentist
+      tags:
+      - Odontologo
+    get:
+      description: Return dentist who matches idParam.
+      parameters:
+      - description: get dentist by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+      summary: Get Single Dentist by id.
+      tags:
+      - Odontologo
+    patch:
+      consumes:
+      - application/json
+      description: Update registration
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+      summary: Update Dentist-Registration
+      tags:
+      - Odontologo
+    put:
+      consumes:
+      - application/json
+      description: Update dentist
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Odontologo'
+      summary: Update Dentist
+      tags:
+      - Odontologo
+swagger: "2.0"

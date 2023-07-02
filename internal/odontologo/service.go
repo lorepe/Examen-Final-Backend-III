@@ -46,7 +46,7 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 		return domain.Odontologo{}, err
 	}
 	if od.Matricula != o.Matricula {
-		return domain.Odontologo{}, errors.New("La matricula debe coincidir")
+		return domain.Odontologo{}, errors.New("Registration must be equal")
 	}
 	return s.repo.UpdateOdontologo(id, o)
 }
