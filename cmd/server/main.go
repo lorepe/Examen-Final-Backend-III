@@ -87,28 +87,27 @@ func main() {
 		odontologos.DELETE(":id", middleware.Authentication(), odontologoHandler.Delete())
 
 	}
-	//TODO AUTENTICACION
+
 	pacientes := r.Group("/pacientes")
 	{
 		pacientes.GET("", pacienteHandler.GetAll())
-		pacientes.POST("", pacienteHandler.Post())
+		pacientes.POST("", middleware.Authentication(), pacienteHandler.Post())
 		pacientes.GET(":id", pacienteHandler.GetById())
-		pacientes.PUT(":id", pacienteHandler.Put())
-		pacientes.PATCH(":id", pacienteHandler.Patch())
-		pacientes.DELETE(":id", pacienteHandler.Delete())
+		pacientes.PUT(":id", middleware.Authentication(), pacienteHandler.Put())
+		pacientes.PATCH(":id", middleware.Authentication(), pacienteHandler.Patch())
+		pacientes.DELETE(":id", middleware.Authentication(), pacienteHandler.Delete())
 
 	}
-	//TODO AUTENTICACION
 
 	turnos := r.Group("/turnos")
 	{
 		turnos.GET("", turnoHandler.GetAll())
-		turnos.POST("", turnoHandler.Post())
+		turnos.POST("", middleware.Authentication(), turnoHandler.Post())
 		turnos.GET(":id", turnoHandler.GetById())
-		turnos.PUT(":id", turnoHandler.Put())
-		turnos.PATCH(":id", turnoHandler.Patch())
-		turnos.DELETE(":id", turnoHandler.Delete())
-		turnos.POST("/turnoauxiliar", turnoHandler.PostDNIMat())
+		turnos.PUT(":id", middleware.Authentication(), turnoHandler.Put())
+		turnos.PATCH(":id", middleware.Authentication(), turnoHandler.Patch())
+		turnos.DELETE(":id", middleware.Authentication(), turnoHandler.Delete())
+		turnos.POST("/turnoauxiliar", middleware.Authentication(), turnoHandler.PostDNIMat())
 		turnos.GET("/paciente", turnoHandler.GetAllByDni())
 
 	}

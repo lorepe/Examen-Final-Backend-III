@@ -20,6 +20,7 @@ func NewPacienteHandler(s paciente.ServicePaciente) *pacienteHandler {
 	}
 }
 
+
 func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
