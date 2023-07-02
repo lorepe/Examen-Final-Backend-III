@@ -25,7 +25,7 @@ func NewPacienteHandler(s paciente.ServicePaciente) *pacienteHandler {
 
 // ListPatients 	godoc
 // @Summary 		List patients
-// @Tags 			Pacientes
+// @Tags 			Paciente
 // @Description 	Get patients list
 // @Produce  		json
 // @Success 		200 {object} []domain.Paciente
@@ -43,7 +43,7 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 
 // CreatePatient	godoc
 // @Summary 		Create Patient
-// @Tags 			Pacientes
+// @Tags 			Paciente
 // @Description 	Post new patient
 // @Accept  		json
 // @Produce  		json
@@ -74,7 +74,7 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 // FindById 			godoc
 // @Summary				Get Single Patient by id.
 // @Param				id path string true "get pacient by id"
-// @Tags 				Pacientes
+// @Tags 				Paciente
 // @Description			Return patient who matches idParam.
 // @Produce				application/json
 // @Success				200 {object} domain.Paciente{}
@@ -99,7 +99,7 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 
 // UpdatePatient 	godoc
 // @Summary 		Update Patient
-// @Tags 			Pacientes
+// @Tags 			Paciente
 // @Param 			paciente body domain.Paciente{} true "Patient to update"
 // @Param			id path string true "id param"
 // @Description 	Update patient
@@ -146,7 +146,7 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 
 // UpdateDNI 	godoc
 // @Summary 		Update Patient-DNI
-// @Tags 			Pacientes
+// @Tags 			Paciente
 // @Param			id path string true "id param"
 // @Param 			paciente body map[string]string true "DNI to patch"
 // @Description 	Update DNI
@@ -200,7 +200,7 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 // @Produce			application/json
 // @Param			id path string true "id param"
 // @Param 			token header string true "token"
-// @Tags			Pacientes
+// @Tags			Paciente
 // @Success			200 {object} web.Response{}
 // @Router			/pacientes/{id} [delete]
 func (ph *pacienteHandler) Delete() gin.HandlerFunc {

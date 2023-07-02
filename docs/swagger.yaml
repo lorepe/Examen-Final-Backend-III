@@ -35,6 +35,43 @@ definitions:
     - fecha_alta
     - nombre
     type: object
+  domain.Turno:
+    properties:
+      descripcion:
+        type: string
+      fecha_hora:
+        description: OdontologoID int    `json:"odontologo_id" binding:"required"`
+        type: string
+      id:
+        type: integer
+      odontologo:
+        allOf:
+        - $ref: '#/definitions/domain.Odontologo'
+        description: PacienteID int `json:"paciente_id" binding:"required"`
+      paciente:
+        $ref: '#/definitions/domain.Paciente'
+    required:
+    - descripcion
+    - fecha_hora
+    - odontologo
+    - paciente
+    type: object
+  domain.TurnoAuxiliar:
+    properties:
+      descripcion:
+        type: string
+      fecha_hora:
+        type: string
+      odontologo_mat:
+        type: string
+      paciente_dni:
+        type: string
+    required:
+    - descripcion
+    - fecha_hora
+    - odontologo_mat
+    - paciente_dni
+    type: object
   web.Response:
     properties:
       data: {}
@@ -213,7 +250,7 @@ paths:
             type: array
       summary: List patients
       tags:
-      - Pacientes
+      - Paciente
     post:
       consumes:
       - application/json
@@ -239,7 +276,7 @@ paths:
             $ref: '#/definitions/domain.Paciente'
       summary: Create Patient
       tags:
-      - Pacientes
+      - Paciente
   /pacientes/{id}:
     delete:
       description: Remove Patient data by id.
@@ -263,7 +300,7 @@ paths:
             $ref: '#/definitions/web.Response'
       summary: Delete Patient
       tags:
-      - Pacientes
+      - Paciente
     get:
       description: Return patient who matches idParam.
       parameters:
@@ -281,7 +318,7 @@ paths:
             $ref: '#/definitions/domain.Paciente'
       summary: Get Single Patient by id.
       tags:
-      - Pacientes
+      - Paciente
     patch:
       consumes:
       - application/json
@@ -314,7 +351,7 @@ paths:
             $ref: '#/definitions/domain.Paciente'
       summary: Update Patient-DNI
       tags:
-      - Pacientes
+      - Paciente
     put:
       consumes:
       - application/json
@@ -345,5 +382,200 @@ paths:
             $ref: '#/definitions/domain.Paciente'
       summary: Update Patient
       tags:
-      - Pacientes
+      - Paciente
+  /turnos:
+    get:
+      description: Get appointment list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Turno'
+            type: array
+      summary: List appointments
+      tags:
+      - Turno
+    post:
+      consumes:
+      - application/json
+      description: Post new appointment
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment to store
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Turno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Create Appointment
+      tags:
+      - Turno
+  /turnos/{id}:
+    delete:
+      description: Remove Appointment data by id.
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.Response'
+      summary: Delete Appointment
+      tags:
+      - Turno
+    get:
+      description: Return appointment who matches idParam.
+      parameters:
+      - description: get appointment by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Get Single Appointment by id.
+      tags:
+      - Turno
+    patch:
+      consumes:
+      - application/json
+      description: Update date
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Date to patch
+        in: body
+        name: turno
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Update Appointment-Date
+      tags:
+      - Turno
+    put:
+      consumes:
+      - application/json
+      description: Update appointment
+      parameters:
+      - description: Apponitment to update
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Turno'
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Update Appointment
+      tags:
+      - Turno
+  /turnos/paciente:
+    get:
+      description: Get appointment list by patient DNI
+      parameters:
+      - description: dni param
+        in: query
+        name: dni
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Turno'
+            type: array
+      summary: List appointments by patient DNI
+      tags:
+      - Turno
+  /turnos/turnoauxiliar:
+    post:
+      consumes:
+      - application/json
+      description: Post new appointment with dni and registration
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment to store
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.TurnoAuxiliar'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Create Appointment with dni and registration
+      tags:
+      - Turno
 swagger: "2.0"
