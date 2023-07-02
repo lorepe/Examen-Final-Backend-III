@@ -41,7 +41,7 @@ func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
 }
 
 func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	od, err := s.GetOdontologoById(id)
+	od, err := s.repo.GetOdontologoById(id)
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
@@ -52,7 +52,7 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 }
 
 func (s *service) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	return s.repo.UpdateMatricula(id, o)
+	return s.repo.UpdateOdontologo(id, o)
 }
 
 func (s *service) DeleteOdontologo(id int) error {

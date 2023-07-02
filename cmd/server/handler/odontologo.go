@@ -41,7 +41,6 @@ func (oh *odontologoHandler) Post() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO Validate empty
 		o, err := oh.s.CreateOdontologo(odontologo)
 		if err != nil {
 			web.Failure(ctx, 400, err)
@@ -61,7 +60,6 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//TODO añadir verificacion matricula
 		odontologo, err := oh.s.GetOdontologoById(id)
 		if err != nil {
 			web.Failure(ctx, 404, err)
@@ -129,14 +127,11 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Odontologo{
 			Apellido:  odontologoDb.Apellido,
 			Nombre:    odontologoDb.Nombre,
 			Matricula: r.Matricula,
 		}
-
-		//FIXME FALTA VALIDAR MATRICULA
 		o, err := oh.s.UpdateMatricula(id, update)
 		if err != nil {
 			web.Failure(ctx, 409, err)

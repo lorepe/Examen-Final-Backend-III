@@ -37,7 +37,7 @@ func (db *sqlStore) GetAllOdontologos() ([]domain.Odontologo, error) {
 	}
 	return listaO, nil
 }
-
+//Metodo para obtener listado completo de Pacientes
 func (db *sqlStore) GetAllPacientes() ([]domain.Paciente, error) {
 	var p domain.Paciente
 	var listaP []domain.Paciente
@@ -109,7 +109,7 @@ func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	return listaT, nil
 }
 
-// Método para obtener Odontógo por ID
+// Método para obtener Odontólogo por ID
 func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 	var odontologo domain.Odontologo
 	rows := db.db.QueryRow("SELECT * FROM odontologo WHERE id = ?", id)
@@ -122,7 +122,6 @@ func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 }
 
 //Verificar matricula asignada
-
 func (db *sqlStore) VerificarMatricula(matricula string) (bool, error) {
 	var resultado int
 	rows := db.db.QueryRow("SELECT count(odontologo.id) from odontologo where odontologo.matricula like  ?", matricula)
@@ -157,6 +156,7 @@ func (db *sqlStore) UpdateOdontologo(id int, o domain.Odontologo) error {
 	return nil
 }
 
+//Crear dentista
 func (db *sqlStore) PostOdontologo(o domain.Odontologo) error {
 	query := "INSERT INTO odontologo (nombre, apellido, matricula) VALUES(?,?,?)"
 	stmt, err := db.db.Prepare(query)
@@ -178,6 +178,7 @@ func (db *sqlStore) PostOdontologo(o domain.Odontologo) error {
 
 }
 
+//Borrar Dentista
 func (db *sqlStore) DeleteOdontologo(id int) error {
 
 	query := "DELETE FROM odontologo WHERE id = ?"
@@ -189,7 +190,9 @@ func (db *sqlStore) DeleteOdontologo(id int) error {
 
 }
 
+//Crear paciente
 func (db *sqlStore) PostPaciente(p domain.Paciente) error {
+
 	query := "INSERT INTO paciente (nombre, apellido, dni, domicilio, fecha_alta) VALUES(?,?,?,?,?)"
 	stmt, err := db.db.Prepare(query)
 	if err != nil {
@@ -210,22 +213,34 @@ func (db *sqlStore) PostPaciente(p domain.Paciente) error {
 
 }
 
+//Verificar DNI en uso
+func (db *sqlStore) VerificarDni(dni string) (bool, error) {
+	var resultado int
+	rows := db.db.QueryRow("SELECT count(paciente.id) from paciente where paciente.dni like  ?", dni)
+
+	err := rows.Scan(&resultado)
+	if err != nil {
+		return true, err
+	}
+	if resultado >= 1 {
+		return true, err
+	}
+	return false, nil
+
+}
+
+//Metodo para obtener paciente por Id
 func (db *sqlStore) GetPacienteById(id int) (domain.Paciente, error) {
 	var paciente domain.Paciente
 	rows := db.db.QueryRow("SELECT * FROM paciente WHERE id = ?", id)
-	// if err != nil {
-	// 	return domain.Paciente{}, err
-	// }
-	// for rows.Next() {
-	err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
+	err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Domicilio, &paciente.Dni, &paciente.FechaAlta)
 	if err != nil {
 		return domain.Paciente{}, err
-		// }
-
 	}
 	return paciente, nil
 }
 
+//Metodo para modificar paciente
 func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
 	query := "UPDATE paciente SET nombre = ?, apellido =?, dni=?, domicilio=?, fecha_alta =? WHERE id=?"
 	stmt, err := db.db.Prepare(query)
@@ -244,6 +259,7 @@ func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
 	return nil
 }
 
+//Método para borrar paciente 
 func (db *sqlStore) DeletePaciente(id int) error {
 
 	query := "DELETE FROM paciente WHERE id = ?"
@@ -430,3 +446,6 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	}
 	return listaT, nil
 }
+
+
+//TODO NO SE PUEDEN ELIMINAR PACIENTES U ODONTOLOGOS CON TURNOS

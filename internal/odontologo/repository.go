@@ -11,7 +11,7 @@ type RepositoryOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
-	UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
+	// UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
 	DeleteOdontologo(id int) error
 }
 type repository struct {
@@ -31,11 +31,15 @@ func (r *repository) GetAll() ([]domain.Odontologo, error) {
 }
 
 func (r *repository) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error) {
-	//TODO Validate matricula
-
-	err := r.storage.PostOdontologo(o)
+	verificacion, err := r.storage.VerificarMatricula(o.Matricula)
 	if err != nil {
-		return domain.Odontologo{}, errors.New("Error creating dentist")
+		return domain.Odontologo{}, err
+	}
+	if verificacion == true{
+		return domain.Odontologo{}, err
+	}
+	err = r.storage.PostOdontologo(o)
+	if err != nil {
 	}
 	return o, nil
 
@@ -58,13 +62,6 @@ func (r *repository) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odont
 	return o, nil
 }
 
-func (r *repository) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	err := r.storage.UpdateOdontologo(id, o)
-	if err != nil {
-		return domain.Odontologo{}, errors.New("Error updating dentist")
-	}
-	return o, nil
-}
 
 func (r *repository) DeleteOdontologo(id int) error {
 	err := r.storage.DeleteOdontologo(id)

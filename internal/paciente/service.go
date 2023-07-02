@@ -2,6 +2,7 @@ package paciente
 
 import (
 	"Final/internal/domain"
+	"errors"
 )
 
 type ServicePaciente interface {
@@ -10,6 +11,7 @@ type ServicePaciente interface {
 	GetPacienteById(int) (domain.Paciente, error)
 	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 	DeletePaciente(int) error
+	UpdateDni(int, domain.Paciente) (domain.Paciente, error)
 }
 
 type service struct {
@@ -22,40 +24,32 @@ func NewService(repository RepositoryPaciente) ServicePaciente {
 
 func (s *service) GetAll() ([]domain.Paciente, error) {
 	return s.repo.GetAll()
-	// pacientes, err := s.repo.GetAll()
-	// if err != nil {
-	// 	return []domain.Paciente{}, err
-	// }
-	// return pacientes, nil
 }
 
 func (s *service) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
-
-	paciente, err := s.repo.CreatePaciente(p)
-	if err != nil {
-		return domain.Paciente{}, err
-	}
-	return paciente, nil
-
+	return s.repo.CreatePaciente(p)
 }
 
 func (s *service) GetPacienteById(id int) (domain.Paciente, error) {
 	return s.repo.GetPacienteById(id)
 }
 
-// FIXME Reemplazar por valores predeterminados para el patch
+
 func (s *service) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, error) {
-	paciente, err := s.repo.UpdatePaciente(id, p)
+	pacienteID, err := s.repo.GetPacienteById(id)
 	if err != nil {
 		return domain.Paciente{}, err
 	}
-	return paciente, nil
+	if pacienteID.Dni != p.Dni {
+		return domain.Paciente{}, errors.New("El dni debe coincidir")
+	}
+	return s.repo.UpdatePaciente(id, p)
+}
+
+func (s *service) UpdateDni(id int, p domain.Paciente) (domain.Paciente, error) {
+	return s.repo.UpdatePaciente(id, p)
 }
 
 func (s *service) DeletePaciente(id int) error {
-	err := s.repo.DeletePaciente(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.DeletePaciente(id)
 }
