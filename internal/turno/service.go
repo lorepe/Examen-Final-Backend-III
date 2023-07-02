@@ -22,20 +22,11 @@ func NewService(repository RepositoryTurno) ServiceTurno {
 }
 
 func (s *service) GetAll() ([]domain.Turno, error) {
-	turnos, err := s.repo.GetAll()
-	if err != nil {
-		return []domain.Turno{}, err
-	}
-	return turnos, nil
+	return s.repo.GetAll()
 }
 
 func (s *service) CreateTurno(t domain.Turno) (domain.Turno, error) {
-
-	turno, err := s.repo.CreateTurno(t)
-	if err != nil {
-		return domain.Turno{}, err
-	}
-	return turno, nil
+	return s.repo.CreateTurno(t)
 }
 
 func (s *service) GetTurnoById(id int) (domain.Turno, error) {
@@ -44,19 +35,13 @@ func (s *service) GetTurnoById(id int) (domain.Turno, error) {
 
 // FIXME Reemplazar por valores predeterminados para el patch
 func (s *service) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
-	turno, err := s.repo.UpdateTurno(id, t)
-	if err != nil {
-		return domain.Turno{}, err
-	}
-	return turno, nil
+	return s.repo.UpdateTurno(id, t)
+	
 }
 
 func (s *service) DeleteTurno(id int) error {
-	err := s.repo.DeleteTurno(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.DeleteTurno(id)
+	
 }
 
 func (s *service) CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error {

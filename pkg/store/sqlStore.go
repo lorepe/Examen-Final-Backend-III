@@ -58,7 +58,7 @@ func (db *sqlStore) GetAllPacientes() ([]domain.Paciente, error) {
 	}
 	return listaP, nil
 }
-
+//Metodo para obtener listado completo de Turnos
 func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	var t domain.Turno
 	var listaT []domain.Turno
@@ -270,7 +270,7 @@ func (db *sqlStore) DeletePaciente(id int) error {
 	return nil
 
 }
-
+//Metodo para crear Turno
 func (db *sqlStore) PostTurno(t domain.Turno) error {
 	query := "INSERT INTO turno (id_paciente, id_odontologo, fecha_hora, descripcion) VALUES(?,?,?,?)"
 	stmt, err := db.db.Prepare(query)
@@ -291,7 +291,7 @@ func (db *sqlStore) PostTurno(t domain.Turno) error {
 	return nil
 
 }
-
+//Metodo para traer Turno por Id
 func (db *sqlStore) GetTurnoById(id int) (domain.Turno, error) {
 	var t domain.Turno
 	rows := db.db.QueryRow(
@@ -333,7 +333,7 @@ func (db *sqlStore) GetTurnoById(id int) (domain.Turno, error) {
 	}
 	return t, nil
 }
-
+//Metodo para actualizar un Turno
 func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
 	query := "UPDATE turno SET id_paciente = ?, id_odontologo =?, fecha_hora=?, descripcion=? WHERE id=?"
 	stmt, err := db.db.Prepare(query)
@@ -351,7 +351,7 @@ func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
 	}
 	return nil
 }
-
+//Metodo para borrar Turno
 func (db *sqlStore) DeleteTurno(id int) error {
 
 	query := "DELETE FROM turno WHERE id = ?"

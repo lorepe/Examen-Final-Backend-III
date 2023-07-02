@@ -45,15 +45,12 @@ func (r *repository) CreateTurno(t domain.Turno) (domain.Turno, error) {
 func (r *repository) GetTurnoById(id int) (domain.Turno, error) {
 	turno, err := r.storage.GetTurnoById(id)
 	if err != nil {
-		// return domain.Turno{}, errors.New("appointment not found")
-
-		return domain.Turno{}, err
+		return domain.Turno{}, errors.New("appointment not found")
 	}
 	return turno, nil
 }
 
 func (r *repository) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
-	//TODO validate dni
 	err := r.storage.UpdateTurno(id, t)
 	if err != nil {
 		return domain.Turno{}, errors.New("Error updating appointment")
@@ -64,10 +61,8 @@ func (r *repository) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
 func (r *repository) DeleteTurno(id int) error {
 
 	err := r.storage.DeleteTurno(id)
-	//FIXME ESTABLECER UN ERROR PARA ID INEXISTENTE
-	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
 	if err != nil {
-		return err
+		return errors.New("id not found")
 	}
 	return nil
 }
