@@ -192,7 +192,7 @@ func (db *sqlStore) DeleteOdontologo(id int) error {
 		return err
 	}
 	if me.Number == 1451 {
-    	return errors.New("Operation cannot be performed, appoinments assigned")
+		return errors.New("Operation cannot be performed, appoinments assigned")
 	}
 	return err
 
@@ -277,7 +277,7 @@ func (db *sqlStore) DeletePaciente(id int) error {
 		return err
 	}
 	if me.Number == 1451 {
-    	return errors.New("Operation cannot be performed, appoinments assigned")
+		return errors.New("Operation cannot be performed, appoinments assigned")
 	}
 	return err
 
@@ -439,7 +439,7 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	where p.dni =? ;`
 	rows, err := db.db.Query(query, dni)
 	if err != nil {
-		return nil, err
+		return []domain.Turno{}, err
 	}
 	//
 	for rows.Next() {
@@ -457,13 +457,10 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 			&t.FechaHora,
 			&t.Descripcion)
 		if err != nil {
-			return nil, err
+			return []domain.Turno{}, err
 		} else {
 			listaT = append(listaT, t)
 		}
-
 	}
 	return listaT, nil
 }
-
-
