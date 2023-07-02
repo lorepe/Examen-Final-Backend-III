@@ -1,9 +1,12 @@
 package server
 
 import (
+	_ "Final/docs"
 	"Final/internal/domain"
+	_ "Final/internal/domain"
 	"Final/internal/paciente"
 	"Final/pkg/web"
+	_ "Final/pkg/web"
 	"errors"
 	"strconv"
 
@@ -20,7 +23,13 @@ func NewPacienteHandler(s paciente.ServicePaciente) *pacienteHandler {
 	}
 }
 
-
+// ListPatients 	godoc
+// @Summary 		List patients
+// @Tags 			Pacientes
+// @Description 	Get patients list
+// @Produce  		json
+// @Success 		200 {object} []domain.Paciente
+// @Router 			/pacientes [get]
 func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
@@ -32,6 +41,16 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	}
 }
 
+// CreatePatient	godoc
+// @Summary 		Create Patient
+// @Tags 			Pacientes
+// @Description 	Post new patient
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Param 			odontologo body domain.Paciente{} true "Patient to store"
+// @Success 		200 {object} domain.Paciente{}
+// @Router 			/pacientes [post]
 func (ph *pacienteHandler) Post() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var paciente domain.Paciente
@@ -51,6 +70,15 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 
 }
 
+
+// FindById 			godoc
+// @Summary				Get Single Patient by id.
+// @Param				id path string true "get pacient by id"
+// @Tags 				Pacientes
+// @Description			Return patient who matches idParam.
+// @Produce				application/json
+// @Success				200 {object} domain.Paciente{}
+// @Router				/pacientes/{id} [get]
 func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")
@@ -68,6 +96,18 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 
 	}
 }
+
+// UpdatePatient 	godoc
+// @Summary 		Update Patient
+// @Tags 			Pacientes
+// @Param 			paciente body domain.Paciente{} true "Patient to update"
+// @Param			id path string true "id param"
+// @Description 	Update patient
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Success 		200 {object} domain.Paciente{}
+// @Router 			/pacientes/{id} [put]
 func (ph *pacienteHandler) Put() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
@@ -104,6 +144,17 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 
 }
 
+// UpdateDNI 	godoc
+// @Summary 		Update Patient-DNI
+// @Tags 			Pacientes
+// @Param			id path string true "id param"
+// @Param 			paciente body map[string]string true "DNI to patch"
+// @Description 	Update DNI
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Success 		200 {object} domain.Paciente{}
+// @Router 			/pacientes/{id} [patch]
 func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 	type Request struct {
 		Dni string `json:"dni" binding:"required"`
@@ -143,6 +194,15 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 	}
 }
 
+// DeletePatient		godoc
+// @Summary			Delete Patient
+// @Description		Remove Patient data by id.
+// @Produce			application/json
+// @Param			id path string true "id param"
+// @Param 			token header string true "token"
+// @Tags			Pacientes
+// @Success			200 {object} web.Response{}
+// @Router			/pacientes/{id} [delete]
 func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")

@@ -151,7 +151,7 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 // @Summary 		Update Dentist-Registration
 // @Tags 			Odontologo
 // @Param			id path string true "id param"
-// @Param 			odontologo body map[string]string true "Dentist to patch"
+// @Param 			odontologo body map[string]string true "Registration to patch"
 // @Description 	Update registration
 // @Accept  		json
 // @Produce  		json

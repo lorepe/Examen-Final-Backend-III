@@ -14,6 +14,27 @@ definitions:
     - matricula
     - nombre
     type: object
+  domain.Paciente:
+    properties:
+      apellido:
+        type: string
+      dni:
+        type: string
+      domicilio:
+        type: string
+      fecha_alta:
+        type: string
+      id:
+        type: integer
+      nombre:
+        type: string
+    required:
+    - apellido
+    - dni
+    - domicilio
+    - fecha_alta
+    - nombre
+    type: object
   web.Response:
     properties:
       data: {}
@@ -124,7 +145,7 @@ paths:
         name: id
         required: true
         type: string
-      - description: Dentist to patch
+      - description: Registration to patch
         in: body
         name: odontologo
         required: true
@@ -178,4 +199,151 @@ paths:
       summary: Update Dentist
       tags:
       - Odontologo
+  /pacientes:
+    get:
+      description: Get patients list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Paciente'
+            type: array
+      summary: List patients
+      tags:
+      - Pacientes
+    post:
+      consumes:
+      - application/json
+      description: Post new patient
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient to store
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paciente'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Create Patient
+      tags:
+      - Pacientes
+  /pacientes/{id}:
+    delete:
+      description: Remove Patient data by id.
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.Response'
+      summary: Delete Patient
+      tags:
+      - Pacientes
+    get:
+      description: Return patient who matches idParam.
+      parameters:
+      - description: get pacient by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Get Single Patient by id.
+      tags:
+      - Pacientes
+    patch:
+      consumes:
+      - application/json
+      description: Update DNI
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DNI to patch
+        in: body
+        name: paciente
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Update Patient-DNI
+      tags:
+      - Pacientes
+    put:
+      consumes:
+      - application/json
+      description: Update patient
+      parameters:
+      - description: Patient to update
+        in: body
+        name: paciente
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paciente'
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Update Patient
+      tags:
+      - Pacientes
 swagger: "2.0"
