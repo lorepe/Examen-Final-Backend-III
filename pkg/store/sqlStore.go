@@ -466,4 +466,4 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	return listaT, nil
 }
 
-//TODO NO SE PUEDEN ELIMINAR PACIENTES U ODONTOLOGOS CON TURNOS
+
