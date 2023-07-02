@@ -23,10 +23,10 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
 		if err != nil {
-			web.Failure(ctx,404,err)
+			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx,200,pacientes)
+		web.Success(ctx, 200, pacientes)
 	}
 }
 
@@ -76,7 +76,6 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
 		_, err = ph.s.GetPacienteById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("patient not found"))
@@ -93,8 +92,6 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO validate empty
-
 		p, err := ph.s.UpdatePaciente(id, paciente)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -107,11 +104,7 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 
 func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 	type Request struct {
-		Nombre    string `json:"nombre,omitempty"`
-		Apellido  string `json:"apellido,omitempty"`
-		Domicilio string `json:"domicilio,omitempty"`
-		Dni       string `json:"dni" binding:"required"`
-		FechaAlta string `json:"fecha_alta,omitempty"`
+		Dni string `json:"dni" binding:"required"`
 	}
 	return func(ctx *gin.Context) {
 
@@ -122,8 +115,8 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
-		_, err = ph.s.GetPacienteById(id)
+
+		pacienteDb, err := ph.s.GetPacienteById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("patient not found"))
 			return
@@ -132,16 +125,14 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Paciente{
-			Nombre:    r.Nombre,
-			Apellido:  r.Apellido,
-			Domicilio: r.Domicilio,
+			Nombre:    pacienteDb.Nombre,
+			Apellido:  pacienteDb.Apellido,
+			Domicilio: pacienteDb.Domicilio,
 			Dni:       r.Dni,
-			FechaAlta: r.FechaAlta,
+			FechaAlta: pacienteDb.FechaAlta,
 		}
-		//FIXME FALTA VALIDAR MATRICULA
-		p, err := ph.s.UpdatePaciente(id, update)
+		p, err := ph.s.UpdateDni(id, update)
 		if err != nil {
 			web.Failure(ctx, 409, err)
 			return
@@ -149,7 +140,6 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 		web.Success(ctx, 200, p)
 	}
 }
-
 
 func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
@@ -164,7 +154,7 @@ func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, errors.New("patient not found"))
 			return
 		}
-		
+
 		err = ph.s.DeletePaciente(id)
 		if err != nil {
 			web.Failure(ctx, 404, err)

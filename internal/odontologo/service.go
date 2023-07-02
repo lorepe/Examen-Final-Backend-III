@@ -52,7 +52,7 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 }
 
 func (s *service) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	return s.repo.UpdateMatricula(id, o)
+	return s.repo.UpdateOdontologo(id, o)
 }
 
 func (s *service) DeleteOdontologo(id int) error {

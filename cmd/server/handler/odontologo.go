@@ -129,7 +129,6 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Odontologo{
 			Apellido:  odontologoDb.Apellido,
 			Nombre:    odontologoDb.Nombre,
