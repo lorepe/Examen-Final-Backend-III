@@ -22,21 +22,10 @@ func NewService(repository RepositoryPaciente) ServicePaciente {
 
 func (s *service) GetAll() ([]domain.Paciente, error) {
 	return s.repo.GetAll()
-	// pacientes, err := s.repo.GetAll()
-	// if err != nil {
-	// 	return []domain.Paciente{}, err
-	// }
-	// return pacientes, nil
 }
 
 func (s *service) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
-
-	paciente, err := s.repo.CreatePaciente(p)
-	if err != nil {
-		return domain.Paciente{}, err
-	}
-	return paciente, nil
-
+	return s.repo.CreatePaciente(p)
 }
 
 func (s *service) GetPacienteById(id int) (domain.Paciente, error) {

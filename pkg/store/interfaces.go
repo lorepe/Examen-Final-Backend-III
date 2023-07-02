@@ -36,4 +36,5 @@ type StoreInterface interface {
 
 	//todo ver si sirve de algo
 	VerificarMatricula(string) (bool, error)
+	VerificarDni(string) (bool, error)
 }

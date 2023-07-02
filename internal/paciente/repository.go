@@ -21,6 +21,7 @@ func NewRepository(storage store.StoreInterface) RepositoryPaciente {
 	return &repository{storage}
 }
 
+
 func (r *repository) GetAll() ([]domain.Paciente, error) {
 	pacientes, err := r.storage.GetAllPacientes()
 	if err != nil {
@@ -30,14 +31,18 @@ func (r *repository) GetAll() ([]domain.Paciente, error) {
 }
 
 func (r *repository) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
-	//TODO Validate dni
-
-	err := r.storage.PostPaciente(p)
+	validacion, err:= r.storage.VerificarDni(p.Dni)
+	if err != nil {
+		return domain.Paciente{}, err
+	}
+	if validacion == true{
+		return domain.Paciente{}, errors.New("Dni used")
+	}
+	err = r.storage.PostPaciente(p)
 	if err != nil {
 		return domain.Paciente{}, errors.New("Error creating paciente")
 	}
 	return p, nil
-
 }
 
 func (r *repository) GetPacienteById(id int) (domain.Paciente, error) {

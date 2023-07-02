@@ -23,10 +23,10 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": "list not found"})
+			web.Failure(ctx,404,err)
 			return
 		}
-		ctx.JSON(200, pacientes)
+		web.Success(ctx,200,pacientes)
 	}
 }
 
@@ -38,7 +38,6 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO Validate empty
 		p, err := ph.s.CreatePaciente(paciente)
 		if err != nil {
 			web.Failure(ctx, 400, err)
@@ -59,7 +58,6 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 			return
 		}
 		paciente, err := ph.s.GetPacienteById(id)
-		//FIXME ERROR ESTRUCTRA VACIA
 		if err != nil {
 			web.Failure(ctx, 404, err)
 			return
