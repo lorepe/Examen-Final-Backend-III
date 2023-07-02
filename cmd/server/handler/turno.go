@@ -22,12 +22,11 @@ func NewTurnoHandler(s turno.ServiceTurno) *turnoHandler {
 func (th *turnoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		turnos, err := th.s.GetAll()
-		//FIXME pasar a reponse
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": err})
+			web.Failure(ctx, 404, err)
 			return
 		}
-		ctx.JSON(200, turnos)
+		web.Success(ctx, 200, turnos)
 	}
 }
 
@@ -39,7 +38,6 @@ func (th *turnoHandler) Post() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO Validate empty
 		t, err := th.s.CreateTurno(turno)
 		if err != nil {
 			web.Failure(ctx, 400, err)
@@ -60,7 +58,6 @@ func (th *turnoHandler) GetById() gin.HandlerFunc {
 			return
 		}
 		turno, err := th.s.GetTurnoById(id)
-		//FIXME ERROR ESTRUCTRA VACIA
 		if err != nil {
 			web.Failure(ctx, 404, err)
 			return
@@ -80,7 +77,6 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
 		_, err = th.s.GetTurnoById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("appointment not found"))
@@ -97,8 +93,6 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO validate empty
-
 		t, err := th.s.UpdateTurno(id, turno)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -110,12 +104,8 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 }
 
 func (th *turnoHandler) Patch() gin.HandlerFunc {
-	//FIXME ALL
 	type Request struct {
-		Paciente    domain.Paciente   `json:"paciente,omitempty"`
-		Odontologo  domain.Odontologo `json:"odontologo,omitempty"`
-		FechaHora   string            `json:"fecha_hora" binding:"required"`
-		Descripcion string            `json:"descripcion" binding:"required"`
+		FechaHora string `json:"fecha_hora" binding:"required"`
 	}
 	return func(ctx *gin.Context) {
 
@@ -126,8 +116,7 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
-		_, err = th.s.GetTurnoById(id)
+		turnoDb, err := th.s.GetTurnoById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("appointment not found"))
 			return
@@ -136,14 +125,12 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Turno{
-			Paciente:    r.Paciente,
-			Odontologo:  r.Odontologo,
+			Paciente:    turnoDb.Paciente,
+			Odontologo:  turnoDb.Odontologo,
 			FechaHora:   r.FechaHora,
-			Descripcion: r.Descripcion,
+			Descripcion: turnoDb.Descripcion,
 		}
-		//FIXME FALTA VALIDAR MATRICULA
 		t, err := th.s.UpdateTurno(id, update)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -171,7 +158,7 @@ func (th *turnoHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx, 204, "Message: Deleted")
+		web.Success(ctx, 200, gin.H{"Success": "deleted"})
 	}
 }
 
@@ -183,7 +170,6 @@ func (th *turnoHandler) PostDNIMat() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO Validate empty
 		err = th.s.CreateTurnoaAuxiliar(turno)
 		if err != nil {
 			web.Failure(ctx, 400, err)
@@ -204,12 +190,10 @@ func (th *turnoHandler) GetAllByDni() gin.HandlerFunc {
 			return
 		}
 		turnos, err := th.s.GetAllByDni(dni)
-		//FIXME pasar a reponse
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": err})
+			web.Failure(ctx, 400, err)
 			return
 		}
-		ctx.JSON(200, turnos)
+		web.Success(ctx, 201, turnos)
 	}
 }
-

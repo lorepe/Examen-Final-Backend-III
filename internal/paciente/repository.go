@@ -64,7 +64,7 @@ func (r *repository) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente,
 func (r *repository) DeletePaciente(id int) error {
 	err := r.storage.DeletePaciente(id)
 	if err != nil {
-		return errors.New("id not found")
+		return err
 	}
 	return nil
 
