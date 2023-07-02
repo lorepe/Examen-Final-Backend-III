@@ -51,8 +51,7 @@ momento de realizar POST, PUT, PATCH y DELETE. Esta seguridad mediante
 autenticación deberá estar implementada mediante un middleware.
 
 ● **Documentación de la API:** se debe proveer de la pertinente documentación de la
-API mediante la implementación de Swagger.cuciones deben
-realizarse de manera concurrente (utilizando diferentes goroutines).
+API mediante la implementación de Swagger.
 
 **Requerimientos técnicos**
 La aplicación debe ser desarrollada en diseño orientado a paquetes:
