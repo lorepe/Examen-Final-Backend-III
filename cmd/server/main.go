@@ -2,32 +2,39 @@ package main
 
 import (
 	server "Final/cmd/server/handler"
+	_ "Final/docs"
+
 	"Final/internal/odontologo"
+	_ "Final/internal/odontologo"
 	"Final/internal/paciente"
+	_ "Final/internal/paciente"
 	"Final/internal/turno"
+	_ "Final/internal/turno"
 	"Final/pkg/middleware"
+	_ "Final/pkg/middleware"
 	"Final/pkg/store"
+	_ "Final/pkg/web"
 	"database/sql"
 	"log"
-	_ "Final/docs"
+
+	_ "Final/cmd/server/handler"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title Certified Tech Developer- Especialización Backend
-// @version 1.0
-// @description This API Handle a Dental Clinic.
-// @termsOfService https://developers.ctd.com.ar/es_ar/terminos-y-condiciones
-
-// @contact.name API Support
-// @contact.url https://developers.ctd.com.ar/support
-
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+//	@title			Certified Tech Developer- Especialización Backend Golang
+//	@version		1.0
+//	@description	This API Handle a Dental Clinic in Go using Gin framework
+//	@termsOfService	https://developers.ctd.com.ar/es_ar/terminos-y-condiciones
+//	@contact.name	API Support
+//	@contact.url	https://developers.ctd.com.ar/support
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+//	@host			localhost:8080
 
 func main() {
 
@@ -35,8 +42,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Error al intentar cargar archivo .env")
 	}
-
-
 
 	//FIXME pasar a env
 	db, err := sql.Open("mysql", "root:root@/clinica")

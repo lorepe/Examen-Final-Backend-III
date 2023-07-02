@@ -23,17 +23,231 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/odontologos": {
+            "get": {
+                "description": "Get dentist list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "List dentists",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Odontologo"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post new dentist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "Create Dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                }
+            }
+        },
+        "/odontologos/{id}": {
+            "get": {
+                "description": "Return dentist who matches idParam.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "Get Single Dentist by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get dentist by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update dentist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "Update Dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove Dentist data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "Delete Dentist",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update registration",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Odontologo"
+                ],
+                "summary": "Update Dentist-Registration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Odontologo": {
+            "type": "object",
+            "required": [
+                "apellido",
+                "matricula",
+                "nombre"
+            ],
+            "properties": {
+                "apellido": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "matricula": {
+                    "type": "string"
+                },
+                "nombre": {
+                    "type": "string"
+                }
+            }
+        },
+        "web.Response": {
+            "type": "object",
+            "properties": {
+                "data": {}
+            }
+        }
+    }
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "",
+	Host:             "localhost:8080",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Certified Tech Developer- Especialización Backend",
-	Description:      "This API Handle a Dental Clinic.",
+	Title:            "Certified Tech Developer- Especialización Backend Golang",
+	Description:      "This API Handle a Dental Clinic in Go using Gin framework",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -2,12 +2,16 @@ package server
 
 import (
 	"Final/internal/domain"
+	_ "Final/internal/domain"
 	"Final/internal/odontologo"
 	"Final/pkg/web"
+	_ "Final/pkg/web"
 	"errors"
+	_ "net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	_ "Final/docs"
 )
 
 type odontologoHandler struct {
@@ -19,15 +23,15 @@ func NewOdontologoHandler(s odontologo.SeviceOdontologo) *odontologoHandler {
 		s: s,
 	}
 }
+
+
 // ListDentist godoc
-// @Summary List dentists
-// @Tags domain.Odontologo
-// @Description get dentist list
-// @Produce  json
-// @Success 200 {object} web.Response
-// @Router /odontologos [get]
-
-
+// @Summary 		List dentists
+// @Tags 			Odontologo
+// @Description 	Get dentist list
+// @Produce  		json
+// @Success 		200 {object} []domain.Odontologo
+// @Router 			/odontologos [get]
 func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		odontologos, err := oh.s.GetAll()
@@ -39,6 +43,15 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	}
 }
 
+// CreateDentist 	godoc
+// @Summary 		Create Dentist
+// @Tags 			Odontologo
+// @Description 	Post new dentist
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Success 		200 {object} domain.Odontologo{}
+// @Router 			/odontologos [post]
 func (oh *odontologoHandler) Post() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
@@ -60,6 +73,14 @@ func (oh *odontologoHandler) Post() gin.HandlerFunc {
 
 }
 
+// FindById 			godoc
+// @Summary				Get Single Dentist by id.
+// @Param				id path string true "get dentist by id"
+// @Tags 				Odontologo
+// @Description			Return dentist who matches idParam.
+// @Produce				application/json
+// @Success				200 {object} domain.Odontologo{}
+// @Router				/odontologos/{id} [get]
 func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")
@@ -78,6 +99,16 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 	}
 }
 
+// UpdateDentist 	godoc
+// @Summary 		Update Dentist
+// @Tags 			Odontologo
+// @Param			id path string true "id param"
+// @Description 	Update dentist
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Success 		200 {object} domain.Odontologo{}
+// @Router 			/odontologos/{id} [put]
 func (oh *odontologoHandler) Put() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 
@@ -113,6 +144,17 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 }
 
 // METODO DE NEGOCIO PARA ACTUALIZAR MATRICULA
+
+// UpdateDentist 	godoc
+// @Summary 		Update Dentist-Registration
+// @Tags 			Odontologo
+// @Param			id path string true "id param"
+// @Description 	Update registration
+// @Accept  		json
+// @Produce  		json
+// @Param 			token header string true "token"
+// @Success 		200 {object} domain.Odontologo{}
+// @Router 			/odontologos/{id} [patch]
 func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 	type Request struct {
 		Matricula string `json:"matricula" binding:"required"`
@@ -149,6 +191,14 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 	}
 }
 
+// DeleteDentist		godoc
+// @Summary			Delete Dentist
+// @Description		Remove Dentist data by id.
+// @Produce			application/json
+// @Param			id path string true "id param"
+// @Tags			Odontologo
+// @Success			200 {object} web.Response{}
+// @Router			/odontologos/{id} [delete]
 func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		idParam := ctx.Param("id")
