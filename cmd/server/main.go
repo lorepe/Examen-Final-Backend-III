@@ -45,10 +45,11 @@ func main() {
 	serviceTurno := turno.NewService(repoTurno)
 	turnoHandler := server.NewTurnoHandler(serviceTurno)
 
-	//FIXME pasar a new
+
 	r := gin.New()
 	r.Use(gin.Recovery())
-	r.Use(middleware.Logger())
+	r.Use(gin.Logger())
+	// r.Use(middleware.Logger())
 
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
 	r.GET("", func(c *gin.Context) { c.String(200, "Bienvenido a la Clínica Odontológica") })
