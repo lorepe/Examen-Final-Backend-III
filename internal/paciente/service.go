@@ -41,7 +41,7 @@ func (s *service) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, er
 		return domain.Paciente{}, err
 	}
 	if pacienteID.Dni != p.Dni {
-		return domain.Paciente{}, errors.New("El dni debe coincidir")
+		return domain.Paciente{}, errors.New("DNI must be equal")
 	}
 	return s.repo.UpdatePaciente(id, p)
 }

@@ -14,6 +14,64 @@ definitions:
     - matricula
     - nombre
     type: object
+  domain.Paciente:
+    properties:
+      apellido:
+        type: string
+      dni:
+        type: string
+      domicilio:
+        type: string
+      fecha_alta:
+        type: string
+      id:
+        type: integer
+      nombre:
+        type: string
+    required:
+    - apellido
+    - dni
+    - domicilio
+    - fecha_alta
+    - nombre
+    type: object
+  domain.Turno:
+    properties:
+      descripcion:
+        type: string
+      fecha_hora:
+        description: OdontologoID int    `json:"odontologo_id" binding:"required"`
+        type: string
+      id:
+        type: integer
+      odontologo:
+        allOf:
+        - $ref: '#/definitions/domain.Odontologo'
+        description: PacienteID int `json:"paciente_id" binding:"required"`
+      paciente:
+        $ref: '#/definitions/domain.Paciente'
+    required:
+    - descripcion
+    - fecha_hora
+    - odontologo
+    - paciente
+    type: object
+  domain.TurnoAuxiliar:
+    properties:
+      descripcion:
+        type: string
+      fecha_hora:
+        type: string
+      odontologo_mat:
+        type: string
+      paciente_dni:
+        type: string
+    required:
+    - descripcion
+    - fecha_hora
+    - odontologo_mat
+    - paciente_dni
+    type: object
   web.Response:
     properties:
       data: {}
@@ -56,6 +114,12 @@ paths:
         name: token
         required: true
         type: string
+      - description: Dentist to store
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Odontologo'
       produces:
       - application/json
       responses:
@@ -73,6 +137,11 @@ paths:
       - description: id param
         in: path
         name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
         required: true
         type: string
       produces:
@@ -113,6 +182,14 @@ paths:
         name: id
         required: true
         type: string
+      - description: Registration to patch
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
       - description: token
         in: header
         name: token
@@ -133,6 +210,12 @@ paths:
       - application/json
       description: Update dentist
       parameters:
+      - description: Dentist to update
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Odontologo'
       - description: id param
         in: path
         name: id
@@ -153,4 +236,346 @@ paths:
       summary: Update Dentist
       tags:
       - Odontologo
+  /pacientes:
+    get:
+      description: Get patients list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Paciente'
+            type: array
+      summary: List patients
+      tags:
+      - Paciente
+    post:
+      consumes:
+      - application/json
+      description: Post new patient
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Patient to store
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paciente'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Create Patient
+      tags:
+      - Paciente
+  /pacientes/{id}:
+    delete:
+      description: Remove Patient data by id.
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.Response'
+      summary: Delete Patient
+      tags:
+      - Paciente
+    get:
+      description: Return patient who matches idParam.
+      parameters:
+      - description: get pacient by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Get Single Patient by id.
+      tags:
+      - Paciente
+    patch:
+      consumes:
+      - application/json
+      description: Update DNI
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: DNI to patch
+        in: body
+        name: paciente
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Update Patient-DNI
+      tags:
+      - Paciente
+    put:
+      consumes:
+      - application/json
+      description: Update patient
+      parameters:
+      - description: Patient to update
+        in: body
+        name: paciente
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Paciente'
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Paciente'
+      summary: Update Patient
+      tags:
+      - Paciente
+  /turnos:
+    get:
+      description: Get appointment list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Turno'
+            type: array
+      summary: List appointments
+      tags:
+      - Turno
+    post:
+      consumes:
+      - application/json
+      description: Post new appointment
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment to store
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Turno'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Create Appointment
+      tags:
+      - Turno
+  /turnos/{id}:
+    delete:
+      description: Remove Appointment data by id.
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/web.Response'
+      summary: Delete Appointment
+      tags:
+      - Turno
+    get:
+      description: Return appointment who matches idParam.
+      parameters:
+      - description: get appointment by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Get Single Appointment by id.
+      tags:
+      - Turno
+    patch:
+      consumes:
+      - application/json
+      description: Update date
+      parameters:
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Date to patch
+        in: body
+        name: turno
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Update Appointment-Date
+      tags:
+      - Turno
+    put:
+      consumes:
+      - application/json
+      description: Update appointment
+      parameters:
+      - description: Apponitment to update
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Turno'
+      - description: id param
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Update Appointment
+      tags:
+      - Turno
+  /turnos/paciente:
+    get:
+      description: Get appointment list by patient DNI
+      parameters:
+      - description: dni param
+        in: query
+        name: dni
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Turno'
+            type: array
+      summary: List appointments by patient DNI
+      tags:
+      - Turno
+  /turnos/turnoauxiliar:
+    post:
+      consumes:
+      - application/json
+      description: Post new appointment with dni and registration
+      parameters:
+      - description: token
+        in: header
+        name: token
+        required: true
+        type: string
+      - description: Appointment to store
+        in: body
+        name: turno
+        required: true
+        schema:
+          $ref: '#/definitions/domain.TurnoAuxiliar'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Turno'
+      summary: Create Appointment with dni and registration
+      tags:
+      - Turno
 swagger: "2.0"

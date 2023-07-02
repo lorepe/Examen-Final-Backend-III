@@ -65,6 +65,15 @@ const docTemplate = `{
                         "name": "token",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "description": "Dentist to store",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
                     }
                 ],
                 "responses": {
@@ -119,6 +128,15 @@ const docTemplate = `{
                 "summary": "Update Dentist",
                 "parameters": [
                     {
+                        "description": "Dentist to update",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "id param",
                         "name": "id",
@@ -158,6 +176,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -190,6 +215,18 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "description": "Registration to patch",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "token",
                         "name": "token",
@@ -202,6 +239,519 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    }
+                }
+            }
+        },
+        "/pacientes": {
+            "get": {
+                "description": "Get patients list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "List patients",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Paciente"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post new patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "Create Patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Patient to store",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                }
+            }
+        },
+        "/pacientes/{id}": {
+            "get": {
+                "description": "Return patient who matches idParam.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "Get Single Patient by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get pacient by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update patient",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "Update Patient",
+                "parameters": [
+                    {
+                        "description": "Patient to update",
+                        "name": "paciente",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove Patient data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "Delete Patient",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update DNI",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Paciente"
+                ],
+                "summary": "Update Patient-DNI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "DNI to patch",
+                        "name": "paciente",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Paciente"
+                        }
+                    }
+                }
+            }
+        },
+        "/turnos": {
+            "get": {
+                "description": "Get appointment list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "List appointments",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Turno"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Post new appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Create Appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Appointment to store",
+                        "name": "turno",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                }
+            }
+        },
+        "/turnos/paciente": {
+            "get": {
+                "description": "Get appointment list by patient DNI",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "List appointments by patient DNI",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "dni param",
+                        "name": "dni",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domain.Turno"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/turnos/turnoauxiliar": {
+            "post": {
+                "description": "Post new appointment with dni and registration",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Create Appointment with dni and registration",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Appointment to store",
+                        "name": "turno",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.TurnoAuxiliar"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                }
+            }
+        },
+        "/turnos/{id}": {
+            "get": {
+                "description": "Return appointment who matches idParam.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Get Single Appointment by id.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "get appointment by id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update appointment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Update Appointment",
+                "parameters": [
+                    {
+                        "description": "Apponitment to update",
+                        "name": "turno",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove Appointment data by id.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Delete Appointment",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/web.Response"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update date",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Turno"
+                ],
+                "summary": "Update Appointment-Date",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "id param",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Date to patch",
+                        "name": "turno",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.Turno"
                         }
                     }
                 }
@@ -227,6 +777,91 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "nombre": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Paciente": {
+            "type": "object",
+            "required": [
+                "apellido",
+                "dni",
+                "domicilio",
+                "fecha_alta",
+                "nombre"
+            ],
+            "properties": {
+                "apellido": {
+                    "type": "string"
+                },
+                "dni": {
+                    "type": "string"
+                },
+                "domicilio": {
+                    "type": "string"
+                },
+                "fecha_alta": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nombre": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.Turno": {
+            "type": "object",
+            "required": [
+                "descripcion",
+                "fecha_hora",
+                "odontologo",
+                "paciente"
+            ],
+            "properties": {
+                "descripcion": {
+                    "type": "string"
+                },
+                "fecha_hora": {
+                    "description": "OdontologoID int    ` + "`" + `json:\"odontologo_id\" binding:\"required\"` + "`" + `",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "odontologo": {
+                    "description": "PacienteID int ` + "`" + `json:\"paciente_id\" binding:\"required\"` + "`" + `",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    ]
+                },
+                "paciente": {
+                    "$ref": "#/definitions/domain.Paciente"
+                }
+            }
+        },
+        "domain.TurnoAuxiliar": {
+            "type": "object",
+            "required": [
+                "descripcion",
+                "fecha_hora",
+                "odontologo_mat",
+                "paciente_dni"
+            ],
+            "properties": {
+                "descripcion": {
+                    "type": "string"
+                },
+                "fecha_hora": {
+                    "type": "string"
+                },
+                "odontologo_mat": {
+                    "type": "string"
+                },
+                "paciente_dni": {
                     "type": "string"
                 }
             }
