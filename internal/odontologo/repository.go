@@ -67,9 +67,7 @@ func (r *repository) UpdateMatricula(id int, o domain.Odontologo) (domain.Odonto
 }
 
 func (r *repository) DeleteOdontologo(id int) error {
-
 	err := r.storage.DeleteOdontologo(id)
-
 	if err != nil {
 		return errors.New("id not found")
 	}

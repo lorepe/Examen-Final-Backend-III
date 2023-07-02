@@ -33,5 +33,7 @@ type StoreInterface interface {
 	GetTurnosByDni(id int) ([]domain.Turno, error)
 
 	//MÉTODOS PARA VERIFICAR DATOS
+
+	//todo ver si sirve de algo
 	VerificarMatricula(string) (bool, error)
 }

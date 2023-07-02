@@ -40,15 +40,14 @@ func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
 	return s.repo.GetOdontologoById(id)
 }
 
-// FIXME Reemplazar por alores predeterminados para el patch
 func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
 	od, err := s.GetOdontologoById(id)
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
-	if od.Matricula != o.Matricula{
+	if od.Matricula != o.Matricula {
 		return domain.Odontologo{}, errors.New("La matricula debe coincidir")
-	} 
+	}
 	return s.repo.UpdateOdontologo(id, o)
 }
 
@@ -57,9 +56,5 @@ func (s *service) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontolog
 }
 
 func (s *service) DeleteOdontologo(id int) error {
-	err := s.repo.DeleteOdontologo(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.DeleteOdontologo(id)
 }

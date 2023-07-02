@@ -106,7 +106,7 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 
 }
 
-//METODO DE NEGOCIO PARA ACTUALIZAR MATRICULA
+// METODO DE NEGOCIO PARA ACTUALIZAR MATRICULA
 func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 	type Request struct {
 		Matricula string `json:"matricula" binding:"required"`
@@ -135,7 +135,7 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			Nombre:    odontologoDb.Nombre,
 			Matricula: r.Matricula,
 		}
-		
+
 		//FIXME FALTA VALIDAR MATRICULA
 		o, err := oh.s.UpdateMatricula(id, update)
 		if err != nil {
@@ -164,6 +164,6 @@ func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx, 204, "Message: Deleted")
+		web.Success(ctx, 200, gin.H{"Success": "deleted"})
 	}
 }
