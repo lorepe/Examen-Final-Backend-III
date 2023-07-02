@@ -9,11 +9,25 @@ import (
 	"Final/pkg/store"
 	"database/sql"
 	"log"
+	_ "Final/docs"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title Certified Tech Developer- Especialización Backend
+// @version 1.0
+// @description This API Handle a Dental Clinic.
+// @termsOfService https://developers.ctd.com.ar/es_ar/terminos-y-condiciones
+
+// @contact.name API Support
+// @contact.url https://developers.ctd.com.ar/support
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 func main() {
 
@@ -21,6 +35,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error al intentar cargar archivo .env")
 	}
+
+
 
 	//FIXME pasar a env
 	db, err := sql.Open("mysql", "root:root@/clinica")
@@ -45,12 +61,13 @@ func main() {
 	serviceTurno := turno.NewService(repoTurno)
 	turnoHandler := server.NewTurnoHandler(serviceTurno)
 
-
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
 	// r.Use(middleware.Logger())
 
+	//swagger
+	r.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
 	r.GET("", func(c *gin.Context) { c.String(200, "Bienvenido a la Clínica Odontológica") })
 

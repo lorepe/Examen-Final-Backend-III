@@ -19,6 +19,14 @@ func NewOdontologoHandler(s odontologo.SeviceOdontologo) *odontologoHandler {
 		s: s,
 	}
 }
+// ListDentist godoc
+// @Summary List dentists
+// @Tags domain.Odontologo
+// @Description get dentist list
+// @Produce  json
+// @Success 200 {object} web.Response
+// @Router /odontologos [get]
+
 
 func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
