@@ -33,7 +33,7 @@ func (s *service) GetTurnoById(id int) (domain.Turno, error) {
 	return s.repo.GetTurnoById(id)
 }
 
-// FIXME Reemplazar por valores predeterminados para el patch
+
 func (s *service) UpdateTurno(id int, t domain.Turno) (domain.Turno, error) {
 	return s.repo.UpdateTurno(id, t)
 	
@@ -45,12 +45,7 @@ func (s *service) DeleteTurno(id int) error {
 }
 
 func (s *service) CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error {
-
-	err := s.repo.CreateTurnoDNIMat(ta)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.CreateTurnoDNIMat(ta)
 }
 
 func (s *service) GetAllByDni(dni int) ([]domain.Turno, error) {

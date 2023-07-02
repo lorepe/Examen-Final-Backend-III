@@ -68,7 +68,6 @@ func (r *repository) DeleteTurno(id int) error {
 }
 
 func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
-	//FIXME RETURN
 	err := r.storage.PostTurnoDNIMat(ta)
 
 	if err != nil {

@@ -93,8 +93,6 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO validate empty
-
 		t, err := th.s.UpdateTurno(id, turno)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -133,8 +131,6 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 			FechaHora:   r.FechaHora,
 			Descripcion: turnoDb.Descripcion,
 		}
-		//Todo metodo para fecha
-
 		t, err := th.s.UpdateTurno(id, update)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -174,7 +170,6 @@ func (th *turnoHandler) PostDNIMat() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO Validate empty
 		err = th.s.CreateTurnoaAuxiliar(turno)
 		if err != nil {
 			web.Failure(ctx, 400, err)
@@ -195,11 +190,10 @@ func (th *turnoHandler) GetAllByDni() gin.HandlerFunc {
 			return
 		}
 		turnos, err := th.s.GetAllByDni(dni)
-		//FIXME pasar a reponse
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": err})
+			web.Failure(ctx, 400, err)
 			return
 		}
-		ctx.JSON(200, turnos)
+		web.Success(ctx, 201, turnos)
 	}
 }
