@@ -35,7 +35,7 @@ func (r *repository) CreatePaciente(p domain.Paciente) (domain.Paciente, error) 
 		return domain.Paciente{}, err
 	}
 	if validacion == true {
-		return domain.Paciente{}, errors.New("Dni used")
+		return domain.Paciente{}, errors.New("Dni in use")
 	}
 	err = r.storage.PostPaciente(p)
 	if err != nil {
