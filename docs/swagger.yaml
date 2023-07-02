@@ -56,6 +56,12 @@ paths:
         name: token
         required: true
         type: string
+      - description: Dentist to store
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Odontologo'
       produces:
       - application/json
       responses:
@@ -73,6 +79,11 @@ paths:
       - description: id param
         in: path
         name: id
+        required: true
+        type: string
+      - description: token
+        in: header
+        name: token
         required: true
         type: string
       produces:
@@ -113,6 +124,14 @@ paths:
         name: id
         required: true
         type: string
+      - description: Dentist to patch
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          additionalProperties:
+            type: string
+          type: object
       - description: token
         in: header
         name: token
@@ -133,6 +152,12 @@ paths:
       - application/json
       description: Update dentist
       parameters:
+      - description: Dentist to update
+        in: body
+        name: odontologo
+        required: true
+        schema:
+          $ref: '#/definitions/domain.Odontologo'
       - description: id param
         in: path
         name: id

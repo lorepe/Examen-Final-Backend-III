@@ -10,8 +10,9 @@ import (
 	_ "net/http"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	_ "Final/docs"
+	"github.com/gin-gonic/gin"
+	_ "github.com/gin-gonic/gin"
 )
 
 type odontologoHandler struct {
@@ -23,7 +24,6 @@ func NewOdontologoHandler(s odontologo.SeviceOdontologo) *odontologoHandler {
 		s: s,
 	}
 }
-
 
 // ListDentist godoc
 // @Summary 		List dentists
@@ -50,7 +50,7 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 // @Accept  		json
 // @Produce  		json
 // @Param 			token header string true "token"
-// @Param 			odontologo body request true "Dentist to store"
+// @Param 			odontologo body domain.Odontologo{} true "Dentist to store"
 // @Success 		200 {object} domain.Odontologo{}
 // @Router 			/odontologos [post]
 func (oh *odontologoHandler) Post() gin.HandlerFunc {
@@ -103,6 +103,7 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 // UpdateDentist 	godoc
 // @Summary 		Update Dentist
 // @Tags 			Odontologo
+// @Param 			odontologo body domain.Odontologo{} true "Dentist to update"
 // @Param			id path string true "id param"
 // @Description 	Update dentist
 // @Accept  		json
@@ -150,6 +151,7 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 // @Summary 		Update Dentist-Registration
 // @Tags 			Odontologo
 // @Param			id path string true "id param"
+// @Param 			odontologo body map[string]string true "Dentist to patch"
 // @Description 	Update registration
 // @Accept  		json
 // @Produce  		json
@@ -197,6 +199,7 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 // @Description		Remove Dentist data by id.
 // @Produce			application/json
 // @Param			id path string true "id param"
+// @Param 			token header string true "token"
 // @Tags			Odontologo
 // @Success			200 {object} web.Response{}
 // @Router			/odontologos/{id} [delete]

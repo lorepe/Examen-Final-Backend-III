@@ -65,6 +65,15 @@ const docTemplate = `{
                         "name": "token",
                         "in": "header",
                         "required": true
+                    },
+                    {
+                        "description": "Dentist to store",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
                     }
                 ],
                 "responses": {
@@ -119,6 +128,15 @@ const docTemplate = `{
                 "summary": "Update Dentist",
                 "parameters": [
                     {
+                        "description": "Dentist to update",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.Odontologo"
+                        }
+                    },
+                    {
                         "type": "string",
                         "description": "id param",
                         "name": "id",
@@ -158,6 +176,13 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "token",
+                        "name": "token",
+                        "in": "header",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -188,6 +213,18 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "Dentist to patch",
+                        "name": "odontologo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
                     },
                     {
                         "type": "string",
