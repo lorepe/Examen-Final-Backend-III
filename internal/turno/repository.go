@@ -77,9 +77,5 @@ func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
 }
 
 func (r *repository) GetAllByDni(dni int) ([]domain.Turno, error) {
-	turnos, err := r.storage.GetTurnosByDni(dni)
-	if err != nil {
-		return []domain.Turno{}, errors.New("list not found")
-	}
-	return turnos, nil
+	return r.storage.GetTurnosByDni(dni)
 }

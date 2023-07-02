@@ -266,9 +266,9 @@ func (th *turnoHandler) GetAllByDni() gin.HandlerFunc {
 		}
 		turnos, err := th.s.GetAllByDni(dni)
 		if err != nil {
-			web.Failure(ctx, 400, err)
+			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx, 201, turnos)
+		web.Success(ctx, 200, turnos)
 	}
 }

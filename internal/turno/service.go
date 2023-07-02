@@ -49,9 +49,5 @@ func (s *service) CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error {
 }
 
 func (s *service) GetAllByDni(dni int) ([]domain.Turno, error) {
-	turnos, err := s.repo.GetAllByDni(dni)
-	if err != nil {
-		return []domain.Turno{}, err
-	}
-	return turnos, nil
+	return s.repo.GetAllByDni(dni)
 }
