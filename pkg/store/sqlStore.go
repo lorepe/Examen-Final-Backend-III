@@ -135,7 +135,7 @@ func (db *sqlStore) VerificarMatricula(matricula string) (bool, error) {
 		return true, err
 	}
 	if resultado >= 1 {
-		return true, errors.New("matricula en uso")
+		return true, errors.New("Registration in use")
 	}
 	return false, nil
 
@@ -192,7 +192,7 @@ func (db *sqlStore) DeleteOdontologo(id int) error {
 		return err
 	}
 	if me.Number == 1451 {
-    	return errors.New("No se puede borrar dentista, posee turnos asignados")
+    	return errors.New("Operation cannot be performed, appoinments assigned")
 	}
 	return err
 
@@ -277,7 +277,7 @@ func (db *sqlStore) DeletePaciente(id int) error {
 		return err
 	}
 	if me.Number == 1451 {
-    	return errors.New("No se puede borrar paciente, posee turnos asignados")
+    	return errors.New("Operation cannot be performed, appoinments assigned")
 	}
 	return err
 
