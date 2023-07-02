@@ -5,15 +5,22 @@ import (
 	"Final/internal/odontologo"
 	"Final/internal/paciente"
 	"Final/internal/turno"
+	"Final/pkg/middleware"
 	"Final/pkg/store"
 	"database/sql"
 	"log"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+
+	err := godotenv.Load("./cmd/server/.env")
+	if err != nil {
+		log.Fatal("Error al intentar cargar archivo .env")
+	}
 
 	//FIXME pasar a env
 	db, err := sql.Open("mysql", "root:root@/clinica")
@@ -39,7 +46,9 @@ func main() {
 	turnoHandler := server.NewTurnoHandler(serviceTurno)
 
 	//FIXME pasar a new
-	r := gin.Default()
+	r := gin.New()
+	r.Use(gin.Recovery())
+	r.Use(middleware.Logger())
 
 	r.GET("/ping", func(c *gin.Context) { c.String(200, "pong") })
 	r.GET("", func(c *gin.Context) { c.String(200, "Bienvenido a la Clínica Odontológica") })
@@ -47,14 +56,14 @@ func main() {
 	odontologos := r.Group("/odontologos")
 	{
 		odontologos.GET("", odontologoHandler.GetAll())
-		odontologos.POST("", odontologoHandler.Post())
+		odontologos.POST("", middleware.Authentication(), odontologoHandler.Post())
 		odontologos.GET(":id", odontologoHandler.GetById())
-		odontologos.PUT(":id", odontologoHandler.Put())
-		odontologos.PATCH(":id", odontologoHandler.Patch())
-		odontologos.DELETE(":id", odontologoHandler.Delete())
+		odontologos.PUT(":id", middleware.Authentication(), odontologoHandler.Put())
+		odontologos.PATCH(":id", middleware.Authentication(), odontologoHandler.Patch())
+		odontologos.DELETE(":id", middleware.Authentication(), odontologoHandler.Delete())
 
 	}
-
+	//TODO AUTENTICACION
 	pacientes := r.Group("/pacientes")
 	{
 		pacientes.GET("", pacienteHandler.GetAll())
@@ -65,6 +74,7 @@ func main() {
 		pacientes.DELETE(":id", pacienteHandler.Delete())
 
 	}
+	//TODO AUTENTICACION
 
 	turnos := r.Group("/turnos")
 	{
