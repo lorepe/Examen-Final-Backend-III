@@ -31,11 +31,15 @@ func (r *repository) GetAll() ([]domain.Odontologo, error) {
 }
 
 func (r *repository) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error) {
-	//TODO Validate matricula
-
-	err := r.storage.PostOdontologo(o)
+	verificacion, err := r.storage.VerificarMatricula(o.Matricula)
 	if err != nil {
-		return domain.Odontologo{}, errors.New("Error creating dentist")
+		return domain.Odontologo{}, err
+	}
+	if verificacion == true{
+		return domain.Odontologo{}, err
+	}
+	err = r.storage.PostOdontologo(o)
+	if err != nil {
 	}
 	return o, nil
 

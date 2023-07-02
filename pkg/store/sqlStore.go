@@ -109,7 +109,7 @@ func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	return listaT, nil
 }
 
-// Método para obtener Odontógo por ID
+// Método para obtener Odontólogo por ID
 func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 	var odontologo domain.Odontologo
 	rows := db.db.QueryRow("SELECT * FROM odontologo WHERE id = ?", id)
@@ -122,7 +122,6 @@ func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 }
 
 //Verificar matricula asignada
-
 func (db *sqlStore) VerificarMatricula(matricula string) (bool, error) {
 	var resultado int
 	rows := db.db.QueryRow("SELECT count(odontologo.id) from odontologo where odontologo.matricula like  ?", matricula)
@@ -260,6 +259,7 @@ func (db *sqlStore) UpdatePaciente(id int, p domain.Paciente) error {
 	return nil
 }
 
+//Método para borrar paciente 
 func (db *sqlStore) DeletePaciente(id int) error {
 
 	query := "DELETE FROM paciente WHERE id = ?"
@@ -446,3 +446,6 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	}
 	return listaT, nil
 }
+
+
+//TODO NO SE PUEDEN ELIMINAR PACIENTES U ODONTOLOGOS CON TURNOS

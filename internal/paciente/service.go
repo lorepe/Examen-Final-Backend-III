@@ -34,9 +34,9 @@ func (s *service) GetPacienteById(id int) (domain.Paciente, error) {
 	return s.repo.GetPacienteById(id)
 }
 
-// FIXME Reemplazar por valores predeterminados para el patch
+
 func (s *service) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, error) {
-	pacienteID, err := s.GetPacienteById(id)
+	pacienteID, err := s.repo.GetPacienteById(id)
 	if err != nil {
 		return domain.Paciente{}, err
 	}
@@ -51,9 +51,5 @@ func (s *service) UpdateDni(id int, p domain.Paciente) (domain.Paciente, error) 
 }
 
 func (s *service) DeletePaciente(id int) error {
-	err := s.repo.DeletePaciente(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.DeletePaciente(id)
 }

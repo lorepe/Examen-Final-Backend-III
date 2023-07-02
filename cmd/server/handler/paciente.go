@@ -160,6 +160,6 @@ func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx, 204, "Message: Deleted")
+		web.Success(ctx, 200, gin.H{"Success": "deleted"})
 	}
 }

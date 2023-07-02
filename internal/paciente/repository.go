@@ -12,7 +12,6 @@ type RepositoryPaciente interface {
 	GetPacienteById(id int) (domain.Paciente, error)
 	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 	DeletePaciente(int) error
-	
 }
 type repository struct {
 	storage store.StoreInterface
@@ -21,7 +20,6 @@ type repository struct {
 func NewRepository(storage store.StoreInterface) RepositoryPaciente {
 	return &repository{storage}
 }
-
 
 func (r *repository) GetAll() ([]domain.Paciente, error) {
 	pacientes, err := r.storage.GetAllPacientes()
@@ -32,11 +30,11 @@ func (r *repository) GetAll() ([]domain.Paciente, error) {
 }
 
 func (r *repository) CreatePaciente(p domain.Paciente) (domain.Paciente, error) {
-	validacion, err:= r.storage.VerificarDni(p.Dni)
+	validacion, err := r.storage.VerificarDni(p.Dni)
 	if err != nil {
 		return domain.Paciente{}, err
 	}
-	if validacion == true{
+	if validacion == true {
 		return domain.Paciente{}, errors.New("Dni used")
 	}
 	err = r.storage.PostPaciente(p)
@@ -64,12 +62,9 @@ func (r *repository) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente,
 }
 
 func (r *repository) DeletePaciente(id int) error {
-
 	err := r.storage.DeletePaciente(id)
-	//FIXME ESTABLECER UN ERROR PARA ID INEXISTENTE
-	//FIXME ESTABLECER ERROR PARA PACIENTE CON TURNO
 	if err != nil {
-		return err
+		return errors.New("id not found")
 	}
 	return nil
 
