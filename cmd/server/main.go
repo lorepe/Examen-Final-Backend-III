@@ -69,6 +69,7 @@ func main() {
 	r := gin.New()
 	r.Use(gin.Recovery())
 	r.Use(gin.Logger())
+	//SI DESEA UTLIZAR EL LOGGER PERSONALIZADO DESCOMENTE ESTA LÍNEA
 	// r.Use(middleware.Logger())
 
 	//swagger

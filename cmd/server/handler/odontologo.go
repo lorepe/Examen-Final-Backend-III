@@ -50,6 +50,7 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 // @Accept  		json
 // @Produce  		json
 // @Param 			token header string true "token"
+// @Param 			odontologo body request true "Dentist to store"
 // @Success 		200 {object} domain.Odontologo{}
 // @Router 			/odontologos [post]
 func (oh *odontologoHandler) Post() gin.HandlerFunc {
