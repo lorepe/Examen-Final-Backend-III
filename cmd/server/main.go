@@ -3,6 +3,7 @@ package main
 import (
 	server "Final/cmd/server/handler"
 	_ "Final/docs"
+	"os"
 
 	"Final/internal/odontologo"
 	_ "Final/internal/odontologo"
@@ -43,10 +44,11 @@ func main() {
 	if err != nil {
 		log.Fatal("Error al intentar cargar archivo .env")
 	}
+	puerto:= os.Getenv("PORT") 
 
-	//FIXME pasar a env
-	db, err := sql.Open("mysql", "root:root@/clinica")
-	//user1:secret_password@/my_db"
+	
+	dbstring:= os.Getenv("DATASOURCE") 
+	db, err := sql.Open("mysql", dbstring)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -113,7 +115,6 @@ func main() {
 
 	}
 
-	//TODO hacer una variable del puerto
-	r.Run(":8080")
+	r.Run(puerto)
 
 }
