@@ -11,7 +11,8 @@ type RepositoryOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
-	DeleteOdontologo(id int)error
+	UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
+	DeleteOdontologo(id int) error
 }
 type repository struct {
 	storage store.StoreInterface
@@ -49,19 +50,24 @@ func (r *repository) GetOdontologoById(id int) (domain.Odontologo, error) {
 }
 
 func (r *repository) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	//TODO validate matricula
-
 	err := r.storage.UpdateOdontologo(id, o)
 	if err != nil {
-		return domain.Odontologo{},errors.New("Error updating dentist")
+		return domain.Odontologo{}, errors.New("Error updating dentist")
+	}
+
+	return o, nil
+}
+
+func (r *repository) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
+	err := r.storage.UpdateOdontologo(id, o)
+	if err != nil {
+		return domain.Odontologo{}, errors.New("Error updating dentist")
 	}
 	return o, nil
-
 }
-func (r *repository) DeleteOdontologo(id int)error {
-		
-	err := r.storage.DeleteOdontologo(id)
 
+func (r *repository) DeleteOdontologo(id int) error {
+	err := r.storage.DeleteOdontologo(id)
 	if err != nil {
 		return errors.New("id not found")
 	}

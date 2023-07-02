@@ -3,6 +3,7 @@ package store
 import (
 	"Final/internal/domain"
 	"database/sql"
+	"errors"
 )
 
 type sqlStore struct {
@@ -15,6 +16,7 @@ func NewSqlStore(database *sql.DB) StoreInterface {
 	}
 }
 
+// Método para obtener listado completo de Odontólogos
 func (db *sqlStore) GetAllOdontologos() ([]domain.Odontologo, error) {
 	var o domain.Odontologo
 	var listaO []domain.Odontologo
@@ -107,28 +109,36 @@ func (db *sqlStore) GetAllTurnos() ([]domain.Turno, error) {
 	return listaT, nil
 }
 
+// Método para obtener Odontógo por ID
 func (db *sqlStore) GetOdontologoById(id int) (domain.Odontologo, error) {
 	var odontologo domain.Odontologo
-	rows, err := db.db.Query("SELECT * FROM odontologo WHERE id = ?", id)
+	rows := db.db.QueryRow("SELECT * FROM odontologo WHERE id = ?", id)
+
+	err := rows.Scan(&odontologo.Id, &odontologo.Apellido, &odontologo.Nombre, &odontologo.Matricula)
 	if err != nil {
 		return domain.Odontologo{}, err
-	}
-
-	//FIXME LIKE PACIENTE
-	// if err := rows.Err(); err != nil {
-	// 	return domain.Odontologo{}, err
-
-	// }
-	for rows.Next() {
-		err := rows.Scan(&odontologo.Id, &odontologo.Apellido, &odontologo.Nombre, &odontologo.Matricula)
-		if err != nil {
-			return domain.Odontologo{}, err
-		}
-
 	}
 	return odontologo, nil
 }
 
+//Verificar matricula asignada
+
+func (db *sqlStore) VerificarMatricula(matricula string) (bool, error) {
+	var resultado int
+	rows := db.db.QueryRow("SELECT count(odontologo.id) from odontologo where odontologo.matricula like  ?", matricula)
+
+	err := rows.Scan(&resultado)
+	if err != nil {
+		return true, err
+	}
+	if resultado >= 1 {
+		return true, errors.New("matricula en uso")
+	}
+	return false, nil
+
+}
+
+// Actualizar dentista
 func (db *sqlStore) UpdateOdontologo(id int, o domain.Odontologo) error {
 	query := "UPDATE odontologo SET nombre = ?, apellido =?, matricula=? WHERE id=?"
 	stmt, err := db.db.Prepare(query)
@@ -288,23 +298,23 @@ func (db *sqlStore) GetTurnoById(id int) (domain.Turno, error) {
 		inner join odontologo as o 
 		on o.id = t.id_odontologo
 		where t.id = ?;`, id)
-	
-		err:= rows.Scan(&t.Id,
-				&t.Paciente.Id,
-				&t.Paciente.Nombre,
-				&t.Paciente.Apellido,
-				&t.Paciente.Domicilio,
-				&t.Paciente.Dni,
-				&t.Paciente.FechaAlta,
-				&t.Odontologo.Id,
-				&t.Odontologo.Apellido,
-				&t.Odontologo.Nombre,
-				&t.Odontologo.Matricula,
-				&t.FechaHora,
-				&t.Descripcion)
-			if err != nil {
-				return domain.Turno{}, err
-			}
+
+	err := rows.Scan(&t.Id,
+		&t.Paciente.Id,
+		&t.Paciente.Nombre,
+		&t.Paciente.Apellido,
+		&t.Paciente.Domicilio,
+		&t.Paciente.Dni,
+		&t.Paciente.FechaAlta,
+		&t.Odontologo.Id,
+		&t.Odontologo.Apellido,
+		&t.Odontologo.Nombre,
+		&t.Odontologo.Matricula,
+		&t.FechaHora,
+		&t.Descripcion)
+	if err != nil {
+		return domain.Turno{}, err
+	}
 	return t, nil
 }
 
@@ -315,7 +325,7 @@ func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
 		return err
 	}
 	defer stmt.Close()
-	resultado, err := stmt.Exec(t.Paciente.Id, t.Odontologo.Id, t.FechaHora,t.Descripcion, id)
+	resultado, err := stmt.Exec(t.Paciente.Id, t.Odontologo.Id, t.FechaHora, t.Descripcion, id)
 	if err != nil {
 		return err
 	}
@@ -325,7 +335,6 @@ func (db *sqlStore) UpdateTurno(id int, t domain.Turno) error {
 	}
 	return nil
 }
-
 
 func (db *sqlStore) DeleteTurno(id int) error {
 
@@ -338,8 +347,7 @@ func (db *sqlStore) DeleteTurno(id int) error {
 
 }
 
-
-func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error) {
+func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) error {
 	var paciente domain.Paciente
 	rows := db.db.QueryRow("SELECT * FROM paciente WHERE id = ?", ta.PacienteId)
 	var odontologo domain.Odontologo
@@ -370,7 +378,6 @@ func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) (error) {
 		return err
 	}
 	return nil
-	
 
 }
 func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
@@ -395,11 +402,11 @@ func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {
 	inner join odontologo as o 
 	on o.id = t.id_odontologo
 	where p.dni =? ;`
-	rows, err := db.db.Query(query,dni)
+	rows, err := db.db.Query(query, dni)
 	if err != nil {
 		return nil, err
 	}
-// 
+	//
 	for rows.Next() {
 		err := rows.Scan(&t.Id,
 			&t.Paciente.Id,

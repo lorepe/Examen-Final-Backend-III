@@ -2,6 +2,7 @@ package odontologo
 
 import (
 	"Final/internal/domain"
+	"errors"
 )
 
 type SeviceOdontologo interface {
@@ -9,6 +10,7 @@ type SeviceOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
+	UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
 	DeleteOdontologo(id int) error
 }
 
@@ -21,11 +23,7 @@ func NewService(repository RepositoryOdontologo) SeviceOdontologo {
 }
 
 func (s *service) GetAll() ([]domain.Odontologo, error) {
-	odontologos, err := s.repo.GetAll()
-	if err != nil {
-		return []domain.Odontologo{}, err
-	}
-	return odontologos, nil
+	return s.repo.GetAll()
 }
 
 func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error) {
@@ -39,26 +37,24 @@ func (s *service) CreateOdontologo(o domain.Odontologo) (domain.Odontologo, erro
 }
 
 func (s *service) GetOdontologoById(id int) (domain.Odontologo, error) {
-	odontologo, err := s.repo.GetOdontologoById(id)
-	if err != nil {
-		return domain.Odontologo{}, err
-	}
-	return odontologo, nil
+	return s.repo.GetOdontologoById(id)
 }
 
-// FIXME Reemplazar por alores predeterminados para el patch
 func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	odontologo, err := s.repo.UpdateOdontologo(id, o)
+	od, err := s.GetOdontologoById(id)
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
-	return odontologo, nil
+	if od.Matricula != o.Matricula {
+		return domain.Odontologo{}, errors.New("La matricula debe coincidir")
+	}
+	return s.repo.UpdateOdontologo(id, o)
+}
+
+func (s *service) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
+	return s.repo.UpdateMatricula(id, o)
 }
 
 func (s *service) DeleteOdontologo(id int) error {
-	err := s.repo.DeleteOdontologo(id)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.DeleteOdontologo(id)
 }

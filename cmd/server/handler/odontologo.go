@@ -24,10 +24,10 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		odontologos, err := oh.s.GetAll()
 		if err != nil {
-			ctx.JSON(404, gin.H{"error": "list not found"})
+			web.Failure(ctx, 404, err)
+			return
 		}
-		ctx.JSON(200, odontologos)
-		// web.Success(c, 200, odontologos)
+		web.Success(ctx, 200, odontologos)
 	}
 }
 
@@ -61,8 +61,8 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
+		//TODO añadir verificacion matricula
 		odontologo, err := oh.s.GetOdontologoById(id)
-		//FIXME ERROR ESTRUCTRA VACIA
 		if err != nil {
 			web.Failure(ctx, 404, err)
 			return
@@ -73,7 +73,6 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 }
 
 func (oh *odontologoHandler) Put() gin.HandlerFunc {
-
 	return func(ctx *gin.Context) {
 
 		idParam := ctx.Param("id")
@@ -82,7 +81,6 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
 		_, err = oh.s.GetOdontologoById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("dentist not found"))
@@ -92,15 +90,12 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 409, err)
 			return
 		}
-
 		var odontologo domain.Odontologo
 		err = ctx.ShouldBindJSON(&odontologo)
 		if err != nil {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		//TODO validate empty
-
 		o, err := oh.s.UpdateOdontologo(id, odontologo)
 		if err != nil {
 			web.Failure(ctx, 409, err)
@@ -110,10 +105,10 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 	}
 
 }
+
+// METODO DE NEGOCIO PARA ACTUALIZAR MATRICULA
 func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 	type Request struct {
-		Apellido  string `json:"apellido,omitempty"`
-		Nombre    string `json:"nombre,omitempty"`
 		Matricula string `json:"matricula" binding:"required"`
 	}
 	return func(ctx *gin.Context) {
@@ -125,8 +120,7 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		//FIXME Error id not exist
-		_, err = oh.s.GetOdontologoById(id)
+		odontologoDb, err := oh.s.GetOdontologoById(id)
 		if err != nil {
 			web.Failure(ctx, 404, errors.New("dentist not found"))
 			return
@@ -137,12 +131,13 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 		}
 		//FIXME NO ADMITIR LA MATRICULA
 		update := domain.Odontologo{
-			Apellido:  r.Apellido,
-			Nombre:    r.Nombre,
+			Apellido:  odontologoDb.Apellido,
+			Nombre:    odontologoDb.Nombre,
 			Matricula: r.Matricula,
 		}
+
 		//FIXME FALTA VALIDAR MATRICULA
-		o, err := oh.s.UpdateOdontologo(id, update)
+		o, err := oh.s.UpdateMatricula(id, update)
 		if err != nil {
 			web.Failure(ctx, 409, err)
 			return
@@ -169,6 +164,6 @@ func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 404, err)
 			return
 		}
-		web.Success(ctx, 204, "Message: Deleted")
+		web.Success(ctx, 200, gin.H{"Success": "deleted"})
 	}
 }
