@@ -3,10 +3,10 @@ package server
 import (
 	_ "Final/docs"
 	"Final/internal/domain"
-	_ "Final/internal/domain"
+	
 	"Final/internal/paciente"
 	"Final/pkg/web"
-	_ "Final/pkg/web"
+	
 	"errors"
 	"strconv"
 

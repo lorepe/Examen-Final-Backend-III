@@ -7,10 +7,10 @@ import (
 	"errors"
 	"strconv"
 	"github.com/gin-gonic/gin"
-	_ "Final/internal/domain"
+	
 	_ "net/http"
 	_ "Final/docs"
-	_ "github.com/gin-gonic/gin"
+	
 
 )
 

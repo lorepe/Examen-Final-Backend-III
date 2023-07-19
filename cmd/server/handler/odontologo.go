@@ -2,17 +2,17 @@ package server
 
 import (
 	"Final/internal/domain"
-	_ "Final/internal/domain"
+	
 	"Final/internal/odontologo"
 	"Final/pkg/web"
-	_ "Final/pkg/web"
+	
 	"errors"
 	_ "net/http"
 	"strconv"
 
 	_ "Final/docs"
 	"github.com/gin-gonic/gin"
-	_ "github.com/gin-gonic/gin"
+	
 )
 
 type odontologoHandler struct {

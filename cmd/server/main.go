@@ -6,13 +6,13 @@ import (
 	"os"
 
 	"Final/internal/odontologo"
-	_ "Final/internal/odontologo"
+
 	"Final/internal/paciente"
-	_ "Final/internal/paciente"
+
 	"Final/internal/turno"
-	_ "Final/internal/turno"
+
 	"Final/pkg/middleware"
-	_ "Final/pkg/middleware"
+
 	"Final/pkg/store"
 	_ "Final/pkg/web"
 	"database/sql"
@@ -23,7 +23,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
-
+	
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -44,10 +44,9 @@ func main() {
 	if err != nil {
 		log.Fatal("Error al intentar cargar archivo .env")
 	}
-	puerto:= os.Getenv("PORT") 
+	puerto := os.Getenv("PORT")
 
-	
-	dbstring:= os.Getenv("DATASOURCE") 
+	dbstring := os.Getenv("DATASOURCE")
 	db, err := sql.Open("mysql", dbstring)
 	if err != nil {
 		log.Fatal(err)
