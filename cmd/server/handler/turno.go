@@ -60,7 +60,7 @@ func (th *turnoHandler) Post() gin.HandlerFunc {
 		}
 		t, err := th.s.CreateTurno(turno)
 		if err != nil {
-			web.Failure(ctx, 400, err)
+			web.Failure(ctx, 500, err)
 			return
 		}
 		web.Success(ctx, 201, t)

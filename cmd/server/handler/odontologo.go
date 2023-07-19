@@ -65,7 +65,7 @@ func (oh *odontologoHandler) Post() gin.HandlerFunc {
 		}
 		o, err := oh.s.CreateOdontologo(odontologo)
 		if err != nil {
-			web.Failure(ctx, 400, err)
+			web.Failure(ctx, 500, err)
 			return
 		}
 		web.Success(ctx, 201, o)

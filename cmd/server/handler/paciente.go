@@ -61,7 +61,7 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 		}
 		p, err := ph.s.CreatePaciente(paciente)
 		if err != nil {
-			web.Failure(ctx, 400, err)
+			web.Failure(ctx, 500, err)
 			return
 		}
 		web.Success(ctx, 201, p)
