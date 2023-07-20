@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	_ "Final/docs"
+	"net/http"
 	_ "net/http"
 )
 
@@ -35,10 +36,10 @@ func (th *turnoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		turnos, err := th.s.GetAll()
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound , err)
 			return
 		}
-		web.Success(ctx, 200, turnos)
+		web.Success(ctx, http.StatusOK, turnos)
 	}
 }
 
@@ -57,15 +58,15 @@ func (th *turnoHandler) Post() gin.HandlerFunc {
 		var turno domain.Turno
 		err := ctx.ShouldBindJSON(&turno)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		t, err := th.s.CreateTurno(turno)
 		if err != nil {
-			web.Failure(ctx, 500, err)
+			web.Failure(ctx, http.StatusInternalServerError, err)
 			return
 		}
-		web.Success(ctx, 201, t)
+		web.Success(ctx, http.StatusCreated, t)
 
 	}
 
@@ -84,15 +85,15 @@ func (th *turnoHandler) GetById() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		turno, err := th.s.GetTurnoById(id)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, turno)
+		web.Success(ctx, http.StatusOK, turno)
 
 	}
 }
@@ -115,24 +116,24 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		var turno domain.Turno
 		err = ctx.ShouldBindJSON(&turno)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		t, err := th.s.UpdateTurno(id, turno)
 		if fmt.Sprint(err) == "appointment not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx, http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, t)
+		web.Success(ctx, http.StatusOK, t)
 	}
 
 }
@@ -158,22 +159,22 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx,http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		t, err := th.s.UpdateCitaTurno(id, r.FechaHora)
 		if fmt.Sprint(err) == "appointment not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx, http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, t)
+		web.Success(ctx, http.StatusOK, t)
 	}
 }
 
@@ -191,18 +192,18 @@ func (th *turnoHandler) Delete() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		err = th.s.DeleteTurno(id)
 		if fmt.Sprint(err) == "appointment not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx,http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, gin.H{"Success": "deleted"})
+		web.Success(ctx, http.StatusOK, gin.H{"Success": "deleted"})
 	}
 }
 
@@ -221,15 +222,15 @@ func (th *turnoHandler) PostDNIMat() gin.HandlerFunc {
 		var turno domain.TurnoAuxiliar
 		err := ctx.ShouldBindJSON(&turno)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		err = th.s.CreateTurnoaAuxiliar(turno)
 		if err != nil {
-			web.Failure(ctx, 400, err)
+			web.Failure(ctx, http.StatusBadRequest, err)
 			return
 		}
-		web.Success(ctx, 201, turno)
+		web.Success(ctx, http.StatusCreated, turno)
 
 	}
 
@@ -248,14 +249,14 @@ func (th *turnoHandler) GetAllByDni() gin.HandlerFunc {
 		dniParam := ctx.Query("dni")
 		dni, err := strconv.Atoi(dniParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid dni"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid dni"))
 			return
 		}
 		turnos, err := th.s.GetAllByDni(dni)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, turnos)
+		web.Success(ctx, http.StatusOK, turnos)
 	}
 }

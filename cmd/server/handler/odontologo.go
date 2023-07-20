@@ -8,6 +8,7 @@ import (
 	"Final/pkg/web"
 
 	"errors"
+	"net/http"
 	_ "net/http"
 	"strconv"
 
@@ -37,10 +38,10 @@ func (oh *odontologoHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		odontologos, err := oh.s.GetAll()
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, odontologos)
+		web.Success(ctx, http.StatusOK, odontologos)
 	}
 }
 
@@ -61,15 +62,15 @@ func (oh *odontologoHandler) Post() gin.HandlerFunc {
 
 		err := ctx.ShouldBindJSON(&odontologo)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		o, err := oh.s.CreateOdontologo(odontologo)
 		if err != nil {
-			web.Failure(ctx, 500, err)
+			web.Failure(ctx,http.StatusInternalServerError, err)
 			return
 		}
-		web.Success(ctx, 201, o)
+		web.Success(ctx, http.StatusCreated, o)
 
 	}
 
@@ -88,15 +89,15 @@ func (oh *odontologoHandler) GetById() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx,http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		odontologo, err := oh.s.GetOdontologoById(id)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, odontologo)
+		web.Success(ctx,http.StatusOK, odontologo)
 
 	}
 }
@@ -118,25 +119,25 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		var odontologo domain.Odontologo
 		err = ctx.ShouldBindJSON(&odontologo)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		o, err := oh.s.UpdateOdontologo(id, odontologo)
 
 		if fmt.Sprint(err) == "dentist not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx,http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, o)
+		web.Success(ctx,http.StatusOK, o)
 	}
 
 }
@@ -164,22 +165,22 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx,http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		o, err := oh.s.UpdateMatricula(id, r.Matricula)
 		if fmt.Sprint(err) == "dentist not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx, http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, o)
+		web.Success(ctx, http.StatusOK, o)
 	}
 }
 
@@ -197,14 +198,14 @@ func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx,http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		err = oh.s.DeleteOdontologo(id)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx,http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, gin.H{"Success": "deleted"})
+		web.Success(ctx, http.StatusOK, gin.H{"Success": "deleted"})
 	}
 }

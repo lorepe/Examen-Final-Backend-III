@@ -4,6 +4,7 @@ import (
 	_ "Final/docs"
 	"Final/internal/domain"
 	"fmt"
+	"net/http"
 
 	"Final/internal/paciente"
 	"Final/pkg/web"
@@ -35,10 +36,10 @@ func (ph *pacienteHandler) GetAll() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		pacientes, err := ph.s.GetAll()
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx,http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, pacientes)
+		web.Success(ctx, http.StatusOK, pacientes)
 	}
 }
 
@@ -57,15 +58,15 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 		var paciente domain.Paciente
 		err := ctx.ShouldBindJSON(&paciente)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		p, err := ph.s.CreatePaciente(paciente)
 		if err != nil {
-			web.Failure(ctx, 500, err)
+			web.Failure(ctx, http.StatusInternalServerError, err)
 			return
 		}
-		web.Success(ctx, 201, p)
+		web.Success(ctx, http.StatusCreated, p)
 
 	}
 
@@ -84,15 +85,15 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		paciente, err := ph.s.GetPacienteById(id)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, paciente)
+		web.Success(ctx, http.StatusOK, paciente)
 
 	}
 }
@@ -114,25 +115,25 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		var paciente domain.Paciente
 		err = ctx.ShouldBindJSON(&paciente)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		p, err := ph.s.UpdatePaciente(id, paciente)
 
 		if fmt.Sprint(err) == "Patient not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx, http.StatusConflict, err)
 			return
 		}
-		web.Success(ctx, 200, p)
+		web.Success(ctx, http.StatusOK, p)
 	}
 
 }
@@ -158,23 +159,23 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
-			web.Failure(ctx, 400, errors.New("invalid json"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid json"))
 			return
 		}
 		p, err := ph.s.UpdateDni(id, r.Dni)
 		if fmt.Sprint(err) == "Patient not found" {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		} else if err != nil {
-			web.Failure(ctx, 409, err)
+			web.Failure(ctx, http.StatusConflict, err)
 			return
 		}
 		
-		web.Success(ctx, 200, p)
+		web.Success(ctx, http.StatusOK, p)
 	}
 }
 
@@ -192,14 +193,14 @@ func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
-			web.Failure(ctx, 400, errors.New("invalid id"))
+			web.Failure(ctx, http.StatusBadRequest, errors.New("invalid id"))
 			return
 		}
 		err = ph.s.DeletePaciente(id)
 		if err != nil {
-			web.Failure(ctx, 404, err)
+			web.Failure(ctx, http.StatusNotFound, err)
 			return
 		}
-		web.Success(ctx, 200, gin.H{"Success": "deleted"})
+		web.Success(ctx, http.StatusOK, gin.H{"Success": "deleted"})
 	}
 }
