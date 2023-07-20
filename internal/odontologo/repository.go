@@ -11,7 +11,6 @@ type RepositoryOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
-	// UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
 	DeleteOdontologo(id int) error
 }
 type repository struct {

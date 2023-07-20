@@ -2,17 +2,18 @@ package server
 
 import (
 	"Final/internal/domain"
-	
+	"fmt"
+
 	"Final/internal/odontologo"
 	"Final/pkg/web"
-	
+
 	"errors"
 	_ "net/http"
 	"strconv"
 
 	_ "Final/docs"
+
 	"github.com/gin-gonic/gin"
-	
 )
 
 type odontologoHandler struct {
@@ -120,15 +121,6 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = oh.s.GetOdontologoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("dentist not found"))
-			return
-		}
-		if err != nil {
-			web.Failure(ctx, 409, err)
-			return
-		}
 		var odontologo domain.Odontologo
 		err = ctx.ShouldBindJSON(&odontologo)
 		if err != nil {
@@ -136,7 +128,11 @@ func (oh *odontologoHandler) Put() gin.HandlerFunc {
 			return
 		}
 		o, err := oh.s.UpdateOdontologo(id, odontologo)
-		if err != nil {
+
+		if fmt.Sprint(err) == "dentist not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
@@ -171,22 +167,15 @@ func (oh *odontologoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		odontologoDb, err := oh.s.GetOdontologoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("dentist not found"))
-			return
-		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		update := domain.Odontologo{
-			Apellido:  odontologoDb.Apellido,
-			Nombre:    odontologoDb.Nombre,
-			Matricula: r.Matricula,
-		}
-		o, err := oh.s.UpdateMatricula(id, update)
-		if err != nil {
+		o, err := oh.s.UpdateMatricula(id, r.Matricula)
+		if fmt.Sprint(err) == "dentist not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
@@ -209,11 +198,6 @@ func (oh *odontologoHandler) Delete() gin.HandlerFunc {
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
 			web.Failure(ctx, 400, errors.New("invalid id"))
-			return
-		}
-		_, err = oh.s.GetOdontologoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("dentist not found"))
 			return
 		}
 		err = oh.s.DeleteOdontologo(id)

@@ -10,7 +10,7 @@ type SeviceOdontologo interface {
 	CreateOdontologo(o domain.Odontologo) (domain.Odontologo, error)
 	GetOdontologoById(id int) (domain.Odontologo, error)
 	UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontologo, error)
-	UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error)
+	UpdateMatricula(id int, matricula string) (domain.Odontologo, error)
 	DeleteOdontologo(id int) error
 }
 
@@ -51,10 +51,20 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 	return s.repo.UpdateOdontologo(id, o)
 }
 
-func (s *service) UpdateMatricula(id int, o domain.Odontologo) (domain.Odontologo, error) {
-	return s.repo.UpdateOdontologo(id, o)
+func (s *service) UpdateMatricula(id int, matricula string) (domain.Odontologo, error) {
+	od, err := s.repo.GetOdontologoById(id)
+	od.Matricula = matricula
+	if err != nil {
+		return domain.Odontologo{}, err
+	}
+
+	return s.repo.UpdateOdontologo(id, od)
 }
 
 func (s *service) DeleteOdontologo(id int) error {
+	_, err := s.repo.GetOdontologoById(id)
+	if err != nil {
+		return err
+	}
 	return s.repo.DeleteOdontologo(id)
 }
