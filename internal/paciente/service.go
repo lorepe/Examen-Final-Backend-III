@@ -11,7 +11,7 @@ type ServicePaciente interface {
 	GetPacienteById(int) (domain.Paciente, error)
 	UpdatePaciente(int, domain.Paciente) (domain.Paciente, error)
 	DeletePaciente(int) error
-	UpdateDni(int, domain.Paciente) (domain.Paciente, error)
+	UpdateDni(int, string) (domain.Paciente, error)
 }
 
 type service struct {
@@ -43,13 +43,23 @@ func (s *service) UpdatePaciente(id int, p domain.Paciente) (domain.Paciente, er
 	if pacienteID.Dni != p.Dni {
 		return domain.Paciente{}, errors.New("DNI must be equal")
 	}
+	
 	return s.repo.UpdatePaciente(id, p)
 }
 
-func (s *service) UpdateDni(id int, p domain.Paciente) (domain.Paciente, error) {
+func (s *service) UpdateDni(id int, dni string) (domain.Paciente, error) {
+	p, err:= s.repo.GetPacienteById(id)
+	if err != nil {
+		return domain.Paciente{}, err
+	}
+	p.Dni=dni
 	return s.repo.UpdatePaciente(id, p)
 }
 
 func (s *service) DeletePaciente(id int) error {
+	_, err := s.repo.GetPacienteById(id)
+	if err != nil {
+		return err
+	}
 	return s.repo.DeletePaciente(id)
 }

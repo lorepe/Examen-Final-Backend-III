@@ -3,10 +3,11 @@ package server
 import (
 	_ "Final/docs"
 	"Final/internal/domain"
-	
+	"fmt"
+
 	"Final/internal/paciente"
 	"Final/pkg/web"
-	
+
 	"errors"
 	"strconv"
 
@@ -70,7 +71,6 @@ func (ph *pacienteHandler) Post() gin.HandlerFunc {
 
 }
 
-
 // FindById 			godoc
 // @Summary				Get Single Patient by id.
 // @Param				id path string true "get pacient by id"
@@ -111,23 +111,12 @@ func (ph *pacienteHandler) GetById() gin.HandlerFunc {
 func (ph *pacienteHandler) Put() gin.HandlerFunc {
 
 	return func(ctx *gin.Context) {
-
 		idParam := ctx.Param("id")
 		id, err := strconv.Atoi(idParam)
 		if err != nil {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = ph.s.GetPacienteById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("patient not found"))
-			return
-		}
-		if err != nil {
-			web.Failure(ctx, 409, err)
-			return
-		}
-
 		var paciente domain.Paciente
 		err = ctx.ShouldBindJSON(&paciente)
 		if err != nil {
@@ -135,7 +124,11 @@ func (ph *pacienteHandler) Put() gin.HandlerFunc {
 			return
 		}
 		p, err := ph.s.UpdatePaciente(id, paciente)
-		if err != nil {
+
+		if fmt.Sprint(err) == "Patient not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
@@ -168,28 +161,19 @@ func (ph *pacienteHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-
-		pacienteDb, err := ph.s.GetPacienteById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("patient not found"))
-			return
-		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		update := domain.Paciente{
-			Nombre:    pacienteDb.Nombre,
-			Apellido:  pacienteDb.Apellido,
-			Domicilio: pacienteDb.Domicilio,
-			Dni:       r.Dni,
-			FechaAlta: pacienteDb.FechaAlta,
-		}
-		p, err := ph.s.UpdateDni(id, update)
-		if err != nil {
+		p, err := ph.s.UpdateDni(id, r.Dni)
+		if fmt.Sprint(err) == "Patient not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
+		
 		web.Success(ctx, 200, p)
 	}
 }
@@ -211,12 +195,6 @@ func (ph *pacienteHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = ph.s.GetPacienteById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("patient not found"))
-			return
-		}
-
 		err = ph.s.DeletePaciente(id)
 		if err != nil {
 			web.Failure(ctx, 404, err)

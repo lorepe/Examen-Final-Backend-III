@@ -47,7 +47,7 @@ func (r *repository) CreatePaciente(p domain.Paciente) (domain.Paciente, error) 
 func (r *repository) GetPacienteById(id int) (domain.Paciente, error) {
 	paciente, err := r.storage.GetPacienteById(id)
 	if err != nil {
-		return domain.Paciente{}, errors.New("patient not found")
+		return domain.Paciente{}, errors.New("Patient not found")
 	}
 	return paciente, nil
 }

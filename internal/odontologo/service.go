@@ -53,10 +53,10 @@ func (s *service) UpdateOdontologo(id int, o domain.Odontologo) (domain.Odontolo
 
 func (s *service) UpdateMatricula(id int, matricula string) (domain.Odontologo, error) {
 	od, err := s.repo.GetOdontologoById(id)
-	od.Matricula = matricula
 	if err != nil {
 		return domain.Odontologo{}, err
 	}
+	od.Matricula = matricula
 
 	return s.repo.UpdateOdontologo(id, od)
 }
