@@ -54,6 +54,7 @@ func (s *service) DeleteTurno(id int) error {
 }
 
 func (s *service) CreateTurnoaAuxiliar(ta domain.TurnoAuxiliar) error {
+	
 	return s.repo.CreateTurnoDNIMat(ta)
 }
 

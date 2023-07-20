@@ -13,7 +13,7 @@ type RepositoryTurno interface {
 	UpdateTurno(int, domain.Turno) (domain.Turno, error)
 	DeleteTurno(int) error
 	CreateTurnoDNIMat(domain.TurnoAuxiliar) error
-	GetAllByDni(int)([]domain.Turno,error)
+	GetAllByDni(int) ([]domain.Turno, error)
 }
 
 type repository struct {
@@ -68,7 +68,42 @@ func (r *repository) DeleteTurno(id int) error {
 }
 
 func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
-	err := r.storage.PostTurnoDNIMat(ta)
+	listaPacientes, err := r.storage.GetAllPacientes()
+	if err != nil {
+		return err
+	}
+	var paciente domain.Paciente
+	for _, p := range listaPacientes {
+		if p.Dni == ta.PacienteDni {
+			paciente = domain.Paciente{
+				Id: p.Id,
+				Nombre: p.Nombre,
+				Apellido: p.Apellido,
+				Domicilio: p.Domicilio,
+				Dni: p.Dni,
+				FechaAlta: p.FechaAlta,
+			}
+		}
+	}
+	var listaOdontologos []domain.Odontologo
+	listaOdontologos, err = r.storage.GetAllOdontologos()
+	if err != nil {
+		return err
+	}
+	var odontologo domain.Odontologo
+	for _, o := range listaOdontologos {
+		if o.Matricula == ta.OdontologoMatricula {
+			odontologo = domain.Odontologo{
+				Id: o.Id,
+				Apellido: o.Apellido,
+				Nombre: o.Nombre,
+				Matricula: o.Matricula,
+			}
+		}
+	}
+
+	
+// err := r.storage.PostTurnoDNIMat(ta)
 
 	if err != nil {
 		return errors.New("Error creating appointment")
