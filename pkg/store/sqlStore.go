@@ -293,14 +293,20 @@ func (db *sqlStore) PostTurno(t domain.Turno) error {
 	defer stmt.Close()
 
 	resultado, err := stmt.Exec(t.Paciente.Id, t.Odontologo.Id, t.FechaHora, t.Descripcion)
-	if err != nil {
+	me, ok := err.(*mysql.MySQLError)
+	if !ok {
 		return err
+	}
+	if me.Number == 1452 {
+		return errors.New("Please check the data, some data is wrong")
 	}
 
 	_, err = resultado.RowsAffected()
 	if err != nil {
 		return err
 	}
+
+
 	return nil
 
 }
@@ -379,40 +385,6 @@ func (db *sqlStore) DeleteTurno(id int) error {
 
 }
 
-// Método para crear turno con DNI paciente y Matricula Odontólogo
-func (db *sqlStore) PostTurnoDNIMat(ta domain.TurnoAuxiliar) error {
-	var paciente domain.Paciente
-	rows := db.db.QueryRow("SELECT * FROM paciente WHERE dni like ?", ta.PacienteDni)
-	var odontologo domain.Odontologo
-	rows2 := db.db.QueryRow("SELECT * FROM odontologo WHERE matricula like ?", ta.OdontologoMatricula)
-
-	err := rows.Scan(&paciente.Id, &paciente.Nombre, &paciente.Apellido, &paciente.Dni, &paciente.Domicilio, &paciente.FechaAlta)
-	if err != nil {
-		return err
-	}
-	err2 := rows2.Scan(&odontologo.Id, &odontologo.Apellido, &odontologo.Nombre, &odontologo.Matricula)
-	if err2 != nil {
-		return nil
-	}
-	query := "INSERT INTO turno (id_paciente, id_odontologo, fecha_hora, descripcion) VALUES(?,?,?,?)"
-	stmt, err3 := db.db.Prepare(query)
-	if err3 != nil {
-		return err3
-	}
-	defer stmt.Close()
-
-	resultado, err := stmt.Exec(paciente.Id, odontologo.Id, ta.FechaHora, ta.Descripcion)
-	if err != nil {
-		return err
-	}
-
-	_, err = resultado.RowsAffected()
-	if err != nil {
-		return err
-	}
-	return nil
-
-}
 
 // Método para obtener turnos filtrados por DNI paciente
 func (db *sqlStore) GetTurnosByDni(dni int) ([]domain.Turno, error) {

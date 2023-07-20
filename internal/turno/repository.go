@@ -74,39 +74,39 @@ func (r *repository) CreateTurnoDNIMat(ta domain.TurnoAuxiliar) error {
 	}
 	var paciente domain.Paciente
 	for _, p := range listaPacientes {
-		if p.Dni == ta.PacienteDni {
-			paciente = domain.Paciente{
-				Id: p.Id,
-				Nombre: p.Nombre,
-				Apellido: p.Apellido,
-				Domicilio: p.Domicilio,
-				Dni: p.Dni,
-				FechaAlta: p.FechaAlta,
+		if (p.Dni == ta.PacienteDni) {
+			paciente.Id = p.Id
+			paciente.Nombre = p.Nombre
+			paciente.Apellido = p.Apellido
+			paciente.Dni = p.Dni
+			paciente.FechaAlta = p.FechaAlta
+			
 			}
-		}
-	}
-	var listaOdontologos []domain.Odontologo
-	listaOdontologos, err = r.storage.GetAllOdontologos()
+		} 
+		
+	listaOdontologos, err := r.storage.GetAllOdontologos()
 	if err != nil {
 		return err
 	}
 	var odontologo domain.Odontologo
 	for _, o := range listaOdontologos {
 		if o.Matricula == ta.OdontologoMatricula {
-			odontologo = domain.Odontologo{
-				Id: o.Id,
-				Apellido: o.Apellido,
-				Nombre: o.Nombre,
-				Matricula: o.Matricula,
+				odontologo.Id = o.Id
+				odontologo.Matricula = o.Matricula
+				odontologo.Nombre = o.Nombre
+				odontologo.Apellido =o.Apellido
 			}
 		}
+
+	var newTurno = domain.Turno{
+		Paciente: paciente,
+		Odontologo: odontologo,
+		FechaHora: ta.FechaHora,
+		Descripcion: ta.Descripcion,
 	}
-
-	
-// err := r.storage.PostTurnoDNIMat(ta)
-
+	err = r.storage.PostTurno(newTurno)
 	if err != nil {
-		return errors.New("Error creating appointment")
+		return err
 	}
 	return nil
 }

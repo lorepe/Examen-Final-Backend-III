@@ -29,7 +29,6 @@ type StoreInterface interface {
 	DeleteTurno(id int) error
 
 	//MÉTODOS PARA TURNOS SOLICITADOS POR LÓGICA DE NEGOCIO
-	PostTurnoDNIMat(ta domain.TurnoAuxiliar) error
 	GetTurnosByDni(id int) ([]domain.Turno, error)
 
 	//MÉTODOS PARA VERIFICAR DATOS
