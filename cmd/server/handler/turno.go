@@ -5,13 +5,13 @@ import (
 	"Final/internal/turno"
 	"Final/pkg/web"
 	"errors"
+	"fmt"
 	"strconv"
-	"github.com/gin-gonic/gin"
-	
-	_ "net/http"
-	_ "Final/docs"
-	
 
+	"github.com/gin-gonic/gin"
+
+	_ "Final/docs"
+	_ "net/http"
 )
 
 type turnoHandler struct {
@@ -23,6 +23,7 @@ func NewTurnoHandler(s turno.ServiceTurno) *turnoHandler {
 		s: s,
 	}
 }
+
 // ListAppointment godoc
 // @Summary 		List appointments
 // @Tags 			Turno
@@ -40,6 +41,7 @@ func (th *turnoHandler) GetAll() gin.HandlerFunc {
 		web.Success(ctx, 200, turnos)
 	}
 }
+
 // CreateAppointment 	godoc
 // @Summary 		Create Appointment
 // @Tags 			Turno
@@ -116,16 +118,6 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = th.s.GetTurnoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("appointment not found"))
-			return
-		}
-		if err != nil {
-			web.Failure(ctx, 409, err)
-			return
-		}
-
 		var turno domain.Turno
 		err = ctx.ShouldBindJSON(&turno)
 		if err != nil {
@@ -133,7 +125,10 @@ func (th *turnoHandler) Put() gin.HandlerFunc {
 			return
 		}
 		t, err := th.s.UpdateTurno(id, turno)
-		if err != nil {
+		if fmt.Sprint(err) == "appointment not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
@@ -166,29 +161,22 @@ func (th *turnoHandler) Patch() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		turnoDb, err := th.s.GetTurnoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("appointment not found"))
-			return
-		}
 		if err := ctx.ShouldBindJSON(&r); err != nil {
 			web.Failure(ctx, 400, errors.New("invalid json"))
 			return
 		}
-		update := domain.Turno{
-			Paciente:    turnoDb.Paciente,
-			Odontologo:  turnoDb.Odontologo,
-			FechaHora:   r.FechaHora,
-			Descripcion: turnoDb.Descripcion,
-		}
-		t, err := th.s.UpdateTurno(id, update)
-		if err != nil {
+		t, err := th.s.UpdateCitaTurno(id, r.FechaHora)
+		if fmt.Sprint(err) == "appointment not found" {
+			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
 			web.Failure(ctx, 409, err)
 			return
 		}
 		web.Success(ctx, 200, t)
 	}
 }
+
 // DeleteAppointment		godoc
 // @Summary			Delete Appointment
 // @Description		Remove Appointment data by id.
@@ -206,23 +194,22 @@ func (th *turnoHandler) Delete() gin.HandlerFunc {
 			web.Failure(ctx, 400, errors.New("invalid id"))
 			return
 		}
-		_, err = th.s.GetTurnoById(id)
-		if err != nil {
-			web.Failure(ctx, 404, errors.New("appointment not found"))
-			return
-		}
 		err = th.s.DeleteTurno(id)
-		if err != nil {
+		if fmt.Sprint(err) == "appointment not found" {
 			web.Failure(ctx, 404, err)
+			return
+		} else if err != nil {
+			web.Failure(ctx, 409, err)
 			return
 		}
 		web.Success(ctx, 200, gin.H{"Success": "deleted"})
 	}
 }
+
 // CreateAppointment 	godoc
-// @Summary 		Create Appointment with dni and registration 
+// @Summary 		Create Appointment with dni and registration
 // @Tags 			Turno
-// @Description 	Post new appointment with dni and registration 
+// @Description 	Post new appointment with dni and registration
 // @Accept  		json
 // @Produce  		json
 // @Param 			token header string true "token"
